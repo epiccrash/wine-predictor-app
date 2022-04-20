@@ -20,35 +20,88 @@
                     <a class="nav-link" href="#enterQualityInfo" aria-controls="enterQualityInfo" role="tab" data-bs-toggle="tab" data-toggle="tab">Contribute Information</a>
                 </li>
             </ul>
+
+            {% if (results) %}
+            <h3>Prediction: {{ results }}</h3>
+            {% endif %}
+
             <div class="tab-content">
+                <h3>Enter -1 for a field which you lack data for.</h3>
                 <div role="tabpanel" class="container tab-pane active" id="predictQuality">
                     <form action="{{ url_for('predictQuality') }}" method="POST">
-                        <label for="exampleItem" class="form-label">Example item</label>
-                        <input type="text" class="form-control" id="exampleItem">
-                        <label for="exampleItem2" class="form-label">Example item 2</label>
-                        <input type="text" class="form-control" id="exampleItem2">
+
+                        <label for="fixedAcidity" class="form-label">Fixed acidity</label>
+                        <input id="fixedAcidity" class="form-control" name="fixedAcidity" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="volatileAcidity" class="form-label">Volatile acidity</label>
+                        <input id="volatileAcidity" class="form-control" name="volatileAcidity" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="citricAcid" class="form-label">Citric acid</label>
+                        <input id="citricAcid" class="form-control" name="citricAcid" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
+                        <input id="freeSulfurDioxide" class="form-control" name="freeSulfurDioxide" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
+                        <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="sulfates" class="form-label">Sulfates</label>
+                        <input id="sulfates" class="form-control" name="sulfates" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="alcohol" class="form-label">Alcohol</label>
+                        <input id="alcohol" class="form-control" name="alcohol" type="number" min="-1" max="100" placeholder="0-100 (example: 67)" value="-1">
+                        
+                        <div class="form-check">
+                            <input id="red" class="form-check-input" name="wineType" type="radio" value="red" checked>
+                            <label for="red" class="form-check-label">Red</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="white" class="form-check-input" name="wineType" type="radio" value="white">
+                            <label for="white" class="form-check-label">White</label>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Get Prediction</button>
                     </form>
                 </div>
                 <div role="tabpanel" class="container tab-pane" id="enterQualityInfo">
                     <form action="{{ url_for('enterQualityInfo') }}" method="POST">
-                        <label for="exampleItem" class="form-label">Example item</label>
-                        <input type="text" class="form-control" id="exampleItem">
-                        <label for="exampleItem2" class="form-label">Example item 2</label>
-                        <input type="text" class="form-control" id="exampleItem2">
+                        <label for="fixedAcidity" class="form-label">Fixed acidity</label>
+                        <input id="fixedAcidity" class="form-control" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="volatileAcidity" class="form-label">Volatile acidity</label>
+                        <input id="volatileAcidity" class="form-control" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="citricAcid" class="form-label">Citric acid</label>
+                        <input id="citricAcid" class="form-control" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
+                        <input id="freeSulfurDioxide" class="form-control" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
+                        <input id="totalSulfurDioxide" class="form-control" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="sulfates" class="form-label">Sulfates</label>
+                        <input id="sulfates" class="form-control" type="number" min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+
+                        <label for="alcohol" class="form-label">Alcohol</label>
+                        <input id="alcohol" class="form-control" type="number" min="-1" max="100" placeholder="0-100 (example: 67)" value="-1">
+
+                        <label for="quality" class="form-label">Quality</label>
+                        <input id="quality" class="form-control" type="number" min="0" max="10.0" placeholder="0.0-10.0 (example: 5.5)" step="0.1" required>
+                        
+                        <div class="form-check">
+                            <input id="red" class="form-check-input" name="wineType" type="radio" checked>
+                            <label for="red" class="form-check-label">Red</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="white" class="form-check-input" name="wineType" type="radio">
+                            <label for="white" class="form-check-label">White</label>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Submit Data</button>
                     </form>
                 </div>
             </div>
-
-            {% if (is_data_entered) %}
-            <h3>Data entered</h3>
-            {% endif %}
-
-            {% if (is_predict_quality) %}
-            <h3>Prediction submitted</h3>
-            {% endif %}
-
         </div>
 
     </body>
