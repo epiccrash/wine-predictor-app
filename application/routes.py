@@ -46,13 +46,13 @@ def enterQualityInfo():
 @app.route("/predictQuality", methods=['GET', 'POST'])
 def predictQuality():
     # Form inputs
-    fixedAcidity = request.form.get("fixedAcidity")
-    volatileAcidity = request.form.get("volatileAcidity")
-    citricAcid = request.form.get("citricAcid")
-    freeSulfurDioxide = request.form.get("freeSulfurDioxide")
-    totalSulfurDioxide = request.form.get("totalSulfurDioxide")
-    sulfates = request.form.get("sulfates")
-    alcohol = request.form.get("alcohol")
+    fixedAcidity = float(request.form.get("fixedAcidity"))
+    volatileAcidity = float(request.form.get("volatileAcidity"))
+    citricAcid = float(request.form.get("citricAcid"))
+    freeSulfurDioxide = float(request.form.get("freeSulfurDioxide"))
+    totalSulfurDioxide = float(request.form.get("totalSulfurDioxide"))
+    sulfates = float(request.form.get("sulfates"))
+    alcohol = int(request.form.get("alcohol"))
     wineType = request.form.get("wineType")
 
     # Convert data to JSON
@@ -68,8 +68,8 @@ def predictQuality():
     })
 
     # URL for model
-    url = "https://wine-prediction-web-model.herokuapp.com/api"
     # url = "http://localhost:3000/api"
+    url = "https://wine-prediction-web-model.herokuapp.com/api"
   
     # Post to model
     results = requests.post(url, info)
