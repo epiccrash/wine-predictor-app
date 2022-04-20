@@ -40,7 +40,7 @@ def enterQualityInfo():
     # Post to model
     results = requests.post(url, info)
 
-    return render_template("index.html", is_data_entered=True, fixedAcidity = fixedAcidity, volatileAcidity = volatileAcidity, citricAcid = citricAcid, freeSulfurDioxide = freeSulfurDioxide, totalSulfurDioxide = totalSulfurDioxide, sulfates = sulfates, quality = quality, alcohol = alcohol, results=results.content.decode('UTF-8'), info=info)
+    return render_template("index.html", is_data_entered=True, fixedAcidity = fixedAcidity, volatileAcidity = volatileAcidity, citricAcid = citricAcid, freeSulfurDioxide = freeSulfurDioxide, totalSulfurDioxide = totalSulfurDioxide, sulfates = sulfates, alcohol = alcohol, quality = quality, results=results)
 
 
 @app.route("/predictQuality", methods=['GET', 'POST'])
@@ -74,4 +74,4 @@ def predictQuality():
     # Post to model
     results = requests.post(url, info)
 
-    return render_template("index.html", is_predict_quality=True, fixedAcidity = fixedAcidity, volatileAcidity = volatileAcidity, citricAcid = citricAcid, freeSulfurDioxide = freeSulfurDioxide, totalSulfurDioxide = totalSulfurDioxide, sulfates = sulfates, alcohol = alcohol, results=results.content.decode('UTF-8'), info=info)
+    return render_template("index.html", is_predict_quality=True, fixedAcidity = fixedAcidity, volatileAcidity = volatileAcidity, citricAcid = citricAcid, freeSulfurDioxide = freeSulfurDioxide, totalSulfurDioxide = totalSulfurDioxide, sulfates = sulfates, alcohol = alcohol, results=results.json())

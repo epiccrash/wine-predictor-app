@@ -80,7 +80,25 @@
         </div>
 
         {% if (results) %}
-        <h3>Prediction: {{ results }}</h3>
+        <h3>Your wine has a quality of {{ results["qualityScore"] }} (out of 10)</h3>
+        <p>This ranks it in the <strong>{{ (results["qualityRank"]*100) | int }}{% if ((((results["qualityRank"]*100) | int) | string) | last) == '1' %}st
+        {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '2' %}nd
+        {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '3' %}rd
+        {% else %}th
+        {% endif %}
+        </strong> percentile.</p>
+        <div>
+            <h4>Based on:</h4>
+            <ul>
+                <li>Fixed acidity: {{ fixedAcidity }}</li>
+                <li>Volatile acidity: {{ volatileAcidity }}</li>
+                <li>Citric acid: {{ citricAcid }}</li>
+                <li>Free sulfur dioxide: {{ freeSulfurDioxide }}</li>
+                <li>Total sulfur dioxide: {{ totalSulfurDioxide }}</li>
+                <li>Sulfates: {{ sulfates }}</li>
+                <li>Alcohol: {{ alcohol }}</li>
+            </ul>
+        </div>
         {% endif %}
 
         <div class="tab-content">
