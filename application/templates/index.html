@@ -46,11 +46,162 @@
         padding: 0.5rem 1rem;
     }
 
+    .column table.resultTable {
+        margin-left: auto;
+        margin-top: 10px;
+        display: inline-table;
+    }
+
+    .column table.graph {
+        float: right;
+    }
+
     .resultTable {
         border: 5px;
         border-color: rgb(220, 148, 158);
         border-style: ridge;
     }
+
+    .graph {
+        margin-bottom: 1em;
+        font: normal 100%/150% arial, helvetica, sans-serif;
+    }
+
+    .graph caption {
+        font: bold 150%/120% arial, helvetica, sans-serif;
+        padding-bottom: 0.33em;
+    }
+
+    .graph tbody th {
+        text-align: right;
+    }
+
+    @supports (display:grid) {
+
+        @media (min-width:32em) {
+
+            .graph {
+                display: block;
+                width: 300px;
+                height: 300px;
+            }
+
+            .graph caption {
+                display: block;
+            }
+
+            .graph thead {
+                display: none;
+            }
+
+            .graph tbody {
+                position: relative;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(2em, 1fr));
+                column-gap: 2.5%;
+                align-items: end;
+                height: 100%;
+                margin: 3em 0 1em 2.8em;
+                padding: 0 1em;
+                border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+                background: repeating-linear-gradient(180deg,
+                        rgba(170, 170, 170, 0.7) 0,
+                        rgba(170, 170, 170, 0.7) 1px,
+                        transparent 1px,
+                        transparent 20%);
+            }
+
+            .graph tbody:before,
+            .graph tbody:after {
+                position: absolute;
+                left: -3.2em;
+                width: 2.8em;
+                text-align: right;
+                font: bold 80%/120% arial, helvetica, sans-serif;
+            }
+
+            .graph tbody:before {
+                content: "100%";
+                top: -0.6em;
+            }
+
+            .graph tbody:after {
+                content: "0%";
+                bottom: -0.6em;
+            }
+
+            .graph tr {
+                position: relative;
+                display: block;
+            }
+
+            .graph tr:hover {
+                z-index: 999;
+            }
+
+            .graph th,
+            .graph td {
+                display: block;
+                text-align: center;
+            }
+
+            .graph tbody th {
+                position: absolute;
+                top: -3em;
+                left: 0;
+                width: 100%;
+                font-weight: normal;
+                text-align: center;
+                white-space: nowrap;
+                text-indent: 0;
+                transform: rotate(-45deg);
+            }
+
+            .graph tbody th:after {
+                content: "";
+            }
+
+            .graph td {
+                width: 100%;
+                height: 100%;
+                background: rgb(220, 148, 158);
+                border-radius: 0.5em 0.5em 0 0;
+                transition: background 0.5s;
+            }
+
+            .graph tr:hover td {
+                opacity: 0.7;
+            }
+
+            .graph td span {
+                overflow: hidden;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 0;
+                padding: 0.5em 0;
+                margin: -1em 0 0;
+                font: normal 85%/120% arial, helvetica, sans-serif;
+                /* 			background:white; */
+                /* 			box-shadow:0 0 0.25em rgba(0,0,0,0.6); */
+                font-weight: bold;
+                opacity: 0;
+                transition: opacity 0.5s;
+                color: white;
+            }
+
+            .toggleGraph:checked+table td span,
+            .graph tr:hover td span {
+                width: 4em;
+                margin-left: -2em;
+                /* 1/2 the declared width */
+                opacity: 1;
+            }
+
+        }
+
+    }
+
 </style>
 
 <head>
@@ -87,16 +238,22 @@
         {% if (results) %}
         <hr>
         {% if (is_predict_quality) %}
-        <p style="text-align: center; font-size: 40px;">Your wine has a quality of <mark style="color: rgb(209, 85, 102); background-color: white;">{{ results["qualityScore"] }} </mark><mark style="font-size: 30px; background-color: white;">(out of 10)</mark></p>
-        <p style="text-align: center; font-size: 23px;">This ranks it in the <mark style="color: rgb(229, 181, 92); background-color: white;"><strong>{{ (results["qualityRank"]*100) | int }}{% if ((((results["qualityRank"]*100) |
-                int) | string) | last) == '1' %}st
-                {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '2' %}nd
-                {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '3' %}rd
-                {% else %}th
-                {% endif %}</mark>
+        <h6>{{ results}} </h6>
+
+        <p style="text-align: center; font-size: 40px;">Your wine has a quality of <mark
+                style="color: rgb(209, 85, 102); background-color: white;">{{ results["qualityScore"] }} </mark><mark
+                style="font-size: 30px; background-color: white;">(out of 10)</mark></p>
+        <p style="text-align: center; font-size: 23px;">This ranks it in the <mark
+                style="color: rgb(229, 181, 92); background-color: white;"><strong>{{ (results["qualityRank"]*100) | int
+                    }}{% if ((((results["qualityRank"]*100) |
+                    int) | string) | last) == '1' %}st
+                    {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '2' %}nd
+                    {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '3' %}rd
+                    {% else %}th
+                    {% endif %}</mark>
             </strong> percentile.</p>
-        <div>
-            <table class="resultTable" style="text-align: center; margin-top:10px; margin-left:500px; width: 300px;">
+        <div class="column">
+            <table class="resultTable" style="text-align: center; width: 300px;">
                 <tr style="height: 50px;">
                     <td style="width: 3px;"></td>
                     <th style="width: 190px;"> Fixed acidity</th>
@@ -105,190 +262,229 @@
                 <tr style="height: 50px;">
                     <td style="width: 3px;"></td>
                     <th style="width: 190px;"> Volatile acidity</th>
-                    <td>  {{ volatileAcidity }}</td>
+                    <td> {{ volatileAcidity }}</td>
                 </tr>
                 <tr style="height: 50px;">
                     <td style="width: 3px;"></td>
                     <th style="width: 190px;"> Citric acid</th>
-                    <td>  {{ citricAcid }}</td>
+                    <td> {{ citricAcid }}</td>
                 </tr>
                 <tr style="height: 50px;">
                     <td style="width: 3px;"></td>
                     <th style="width: 190px;"> Free sulfur dioxide</th>
-                    <td>  {{ freeSulfurDioxide }}</td>
+                    <td> {{ freeSulfurDioxide }}</td>
                 </tr>
                 <tr style="height: 50px;">
                     <td style="width: 3px;"></td>
                     <th style="width: 190px;"> Total sulfur dioxide</th>
-                    <td>  {{ totalSulfurDioxide }}</td>
+                    <td> {{ totalSulfurDioxide }}</td>
                 </tr>
                 <tr style="height: 50px;">
                     <td style="width: 3px;"></td>
                     <th style="width: 190px;"> Sulfates</th>
-                    <td>  {{ sulfates }}</td>
+                    <td> {{ sulfates }}</td>
                 </tr>
                 <tr style="height: 50px;">
                     <td style="width: 3px;"></td>
                     <th style="width: 190px;"> Alcohol</th>
-                    <td>  {{ alcohol }}</td>
+                    <td> {{ alcohol }}</td>
                 </tr>
             </table>
+            <table class="graph" style="width: 500px;">
+                <caption>Feature Importance Bar Chart</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Percent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fixedAcidityBar" style="height:12%">
+                        <th scope="row">Fixed acidity</th>
+                        <td><span>{{ (results["featureImportance"][0]*100 | int)}}%</span></td>
+                    </tr>
+                    <tr style="height:14%">
+                        <th scope="row">Volatile acidity</th>
+                        <td><span>{{ (results["featureImportance"][1]*100 | int)}}%</span></td>
+                    </tr>
+                    <tr style="height:12%">
+                        <th scope="row">Citric acid</th>
+                        <td><span>{{ (results["featureImportance"][2]*100 | int)}}%</span></td>
+                    </tr>
+                    <tr style="height:10%">
+                        <th scope="row">Free sulfer dioxide</th>
+                        <td><span>{{ (results["featureImportance"][3]*100 | int)}}%</span></td>
+                    </tr>
+                    <tr style="height:15%">
+                        <th scope="row">Total sulfer dioxide</th>
+                        <td><span>{{ (results["featureImportance"][4]*100 | int)}}%</span></td>
+                    </tr>
+                    <tr style="height:10%">
+                        <th scope="row">Sulfates</th>
+                        <td><span>{{ (results["featureImportance"][5]*100 | int)}}%</span></td>
+                    </tr>
+                    <tr style="height:19%">
+                        <th scope="row">Alcohol</th>
+                        <td><span>{{ (results["featureImportance"][6]*100 | int)}}%</span></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-      </div> 
+    </div>
     </div>
     <br>
-        {% else %}
-        <h3>{{ results }}</h3>
-        {% endif %}
-        <hr>
-        {% endif %}
+    {% else %}
+    <h3>{{ results }}</h3>
+    {% endif %}
+    <hr>
+    {% endif %}
 
-        <div class="tab-content">
-            <br>
-            <h6 style="text-align: center; color: rgb(160, 147, 149);">Enter -1 for a field which you lack data for.
-            </h6>
-            <br>
-            <div role="tabpanel" class="container tab-pane active" id="predictQuality">
-                <form action="{{ url_for('predictQuality') }}" method="POST">
-                    <table>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="fixedAcidity" class="form-label" style="text-align: center;">Fixed
-                                acidity</label>
-                            <input id="fixedAcidity" class="form-control" name="fixedAcidity" type="number" min="-1"
-                                max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="volatileAcidity" class="form-label">Volatile acidity</label>
-                            <input id="volatileAcidity" class="form-control" name="volatileAcidity" type="number"
-                                min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="citricAcid" class="form-label">Citric acid</label>
-                            <input id="citricAcid" class="form-control" name="citricAcid" type="number" min="-1"
-                                max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
-                            <input id="freeSulfurDioxide" class="form-control" name="freeSulfurDioxide" type="number"
-                                min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                    </table>
-                    <table>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
-                            <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number"
-                                min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="sulfates" class="form-label">Sulfates</label>
-                            <input id="sulfates" class="form-control" name="sulfates" type="number" min="-1" max="10.0"
-                                placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="alcohol" class="form-label">Alcohol</label>
-                            <input id="alcohol" class="form-control" name="alcohol" type="number" min="-1" max="100"
-                                placeholder="0-100 (example: 67)" value="-1">
-                        </th>
-                    </table>
-                    <br>
-                    <div class="all-divs">
-                        <fieldset>
-                            <div class="form-check">
-                                <label>
-                                    <input id="red" class="form-check-input" name="wineType" type="radio" value="red"
-                                        checked></inputid>
-                                    <span>Red</span>
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <label>
-                                    <input id="white" class="form-check-input" name="wineType" type="radio"
-                                        value="white" checked></inputid>
-                                    <span>White</span>
-                                </label>
-                            </div>
-                        </fieldset>
-                        <br>
-                        <div class="submit-button">
-                            <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;"
-                                type="submit" class="btn btn-primary">Get Prediction</button>
+    <div class="tab-content">
+        <br>
+        <h6 style="text-align: center; color: rgb(160, 147, 149);">Enter -1 for a field which you lack data for.
+        </h6>
+        <br>
+        <div role="tabpanel" class="container tab-pane active" id="predictQuality">
+            <form action="{{ url_for('predictQuality') }}" method="POST">
+                <table>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="fixedAcidity" class="form-label" style="text-align: center;">Fixed
+                            acidity</label>
+                        <input id="fixedAcidity" class="form-control" name="fixedAcidity" type="number" min="-1"
+                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="volatileAcidity" class="form-label">Volatile acidity</label>
+                        <input id="volatileAcidity" class="form-control" name="volatileAcidity" type="number" min="-1"
+                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="citricAcid" class="form-label">Citric acid</label>
+                        <input id="citricAcid" class="form-control" name="citricAcid" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
+                        <input id="freeSulfurDioxide" class="form-control" name="freeSulfurDioxide" type="number"
+                            min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                </table>
+                <table>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
+                        <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number"
+                            min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="sulfates" class="form-label">Sulfates</label>
+                        <input id="sulfates" class="form-control" name="sulfates" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="alcohol" class="form-label">Alcohol</label>
+                        <input id="alcohol" class="form-control" name="alcohol" type="number" min="-1" max="100"
+                            placeholder="0-100 (example: 67)" value="-1">
+                    </th>
+                </table>
+                <br>
+                <div class="all-divs">
+                    <fieldset>
+                        <div class="form-check">
+                            <label>
+                                <input id="red" class="form-check-input" name="wineType" type="radio" value="red"
+                                    checked></inputid>
+                                <span>Red</span>
+                            </label>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div role="tabpanel" class="container tab-pane" id="enterQualityInfo">
-                <form action="{{ url_for('enterQualityInfo') }}" method="POST">
-                    <table>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="fixedAcidity" class="form-label">Fixed acidity</label>
-                            <input id="fixedAcidity" class="form-control" type="number" min="-1" max="10.0"
-                                placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="volatileAcidity" class="form-label">Volatile acidity</label>
-                            <input id="volatileAcidity" class="form-control" type="number" min="-1" max="10.0"
-                                placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="citricAcid" class="form-label">Citric acid</label>
-                            <input id="citricAcid" class="form-control" type="number" min="-1" max="10.0"
-                                placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
-                            <input id="freeSulfurDioxide" class="form-control" type="number" min="-1" max="10.0"
-                                placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                    </table>
-                    <table>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
-                            <input id="totalSulfurDioxide" class="form-control" type="number" min="-1" max="10.0"
-                                placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="sulfates" class="form-label">Sulfates</label>
-                            <input id="sulfates" class="form-control" type="number" min="-1" max="10.0"
-                                placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="alcohol" class="form-label">Alcohol</label>
-                            <input id="alcohol" class="form-control" type="number" min="-1" max="100"
-                                placeholder="0-100 (example: 67)" value="-1">
-                        </th>
-                        <th style="width: 300px; text-align: center;">
-                            <label for="quality" class="form-label">Quality</label>
-                            <input id="quality" class="form-control" type="number" min="0" max="10.0"
-                                placeholder="0.0-10.0 (example: 5.5)" step="0.1" required>
-                        </th>
-                    </table>
-                    <br>
-                    <div class="all-divs">
-                        <fieldset>
-                            <div class="form-check">
-                                <label>
-                                    <input id="red" class="form-check-input" name="wineType" type="radio" value="red"
-                                        checked></inputid>
-                                    <span>Red</span>
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <label>
-                                    <input id="white" class="form-check-input" name="wineType" type="radio"
-                                        value="white" checked></inputid>
-                                    <span>White</span>
-                                </label>
-                            </div>
-                        </fieldset>
-                        <br>
-                        <div class="submit-button">
-                            <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;"
-                                type="submit" class="btn btn-primary">Submit Data</button>
+                        <div class="form-check">
+                            <label>
+                                <input id="white" class="form-check-input" name="wineType" type="radio" value="white"
+                                    checked></inputid>
+                                <span>White</span>
+                            </label>
                         </div>
+                    </fieldset>
+                    <br>
+                    <div class="submit-button">
+                        <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;" type="submit"
+                            class="btn btn-primary">Get Prediction</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
+        <div role="tabpanel" class="container tab-pane" id="enterQualityInfo">
+            <form action="{{ url_for('enterQualityInfo') }}" method="POST">
+                <table>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="fixedAcidity" class="form-label">Fixed acidity</label>
+                        <input id="fixedAcidity" class="form-control" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="volatileAcidity" class="form-label">Volatile acidity</label>
+                        <input id="volatileAcidity" class="form-control" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="citricAcid" class="form-label">Citric acid</label>
+                        <input id="citricAcid" class="form-control" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
+                        <input id="freeSulfurDioxide" class="form-control" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                </table>
+                <table>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
+                        <input id="totalSulfurDioxide" class="form-control" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="sulfates" class="form-label">Sulfates</label>
+                        <input id="sulfates" class="form-control" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="alcohol" class="form-label">Alcohol</label>
+                        <input id="alcohol" class="form-control" type="number" min="-1" max="100"
+                            placeholder="0-100 (example: 67)" value="-1">
+                    </th>
+                    <th style="width: 300px; text-align: center;">
+                        <label for="quality" class="form-label">Quality</label>
+                        <input id="quality" class="form-control" type="number" min="0" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" step="0.1" required>
+                    </th>
+                </table>
+                <br>
+                <div class="all-divs">
+                    <fieldset>
+                        <div class="form-check">
+                            <label>
+                                <input id="red" class="form-check-input" name="wineType" type="radio" value="red"
+                                    checked></inputid>
+                                <span>Red</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label>
+                                <input id="white" class="form-check-input" name="wineType" type="radio" value="white"
+                                    checked></inputid>
+                                <span>White</span>
+                            </label>
+                        </div>
+                    </fieldset>
+                    <br>
+                    <div class="submit-button">
+                        <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;" type="submit"
+                            class="btn btn-primary">Submit Data</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     </div>
 
 </body>
