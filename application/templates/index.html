@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <style>
+
     .all-divs {
         text-align: justify;
         display: flex;
@@ -46,6 +47,72 @@
         padding: 0.5rem 1rem;
     }
 
+    .resultTable {
+        border: 5px;
+        border-color: rgb(220, 148, 158);
+        border-style: ridge;
+    }
+
+
+    #pieChartContainer {
+        align-items: center;
+    }
+
+    #pieChart {
+        background: conic-gradient(brown 0.00%, black 0.00% 0.55%, blue 0.55% 6.08%, green 6.08% 13.68%, yellow 13.68% 23.27%, orange 23.27% 40.47%, red 40.47%);
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+    }
+
+    #legenda {
+        margin-left: 20px;
+        background-color: white;
+        padding: 5px;
+    }
+
+    .entry {
+        display: flex;
+        align-items: center;
+    }
+
+    .entry-color {
+        height: 10px;
+        width: 10px;
+    }
+
+    .entry-text {
+        margin-left: 5px;
+    }
+
+    #color-red {
+        background-color: red;
+    }
+
+    #color-orange {
+        background-color: orange;
+    }
+
+    #color-yellow {
+        background-color: yellow;
+    }
+
+    #color-green {
+        background-color: green;
+    }
+
+    #color-blue {
+        background-color: blue;
+    }
+
+    #color-black {
+        background-color: black;
+    }
+
+    #color-brown {
+        background-color: brown;
+    }
+
     .column table.resultTable {
         margin-left: auto;
         margin-top: 10px;
@@ -55,153 +122,6 @@
     .column table.graph {
         float: right;
     }
-
-    .resultTable {
-        border: 5px;
-        border-color: rgb(220, 148, 158);
-        border-style: ridge;
-    }
-
-    .graph {
-        margin-bottom: 1em;
-        font: normal 100%/150% arial, helvetica, sans-serif;
-    }
-
-    .graph caption {
-        font: bold 150%/120% arial, helvetica, sans-serif;
-        padding-bottom: 0.33em;
-    }
-
-    .graph tbody th {
-        text-align: right;
-    }
-
-    @supports (display:grid) {
-
-        @media (min-width:32em) {
-
-            .graph {
-                display: block;
-                width: 300px;
-                height: 300px;
-            }
-
-            .graph caption {
-                display: block;
-            }
-
-            .graph thead {
-                display: none;
-            }
-
-            .graph tbody {
-                position: relative;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(2em, 1fr));
-                column-gap: 2.5%;
-                align-items: end;
-                height: 100%;
-                margin: 3em 0 1em 2.8em;
-                padding: 0 1em;
-                border-bottom: 2px solid rgba(0, 0, 0, 0.5);
-                background: repeating-linear-gradient(180deg,
-                        rgba(170, 170, 170, 0.7) 0,
-                        rgba(170, 170, 170, 0.7) 1px,
-                        transparent 1px,
-                        transparent 20%);
-            }
-
-            .graph tbody:before,
-            .graph tbody:after {
-                position: absolute;
-                left: -3.2em;
-                width: 2.8em;
-                text-align: right;
-                font: bold 80%/120% arial, helvetica, sans-serif;
-            }
-
-            .graph tbody:before {
-                content: "100%";
-                top: -0.6em;
-            }
-
-            .graph tbody:after {
-                content: "0%";
-                bottom: -0.6em;
-            }
-
-            .graph tr {
-                position: relative;
-                display: block;
-            }
-
-            .graph tr:hover {
-                z-index: 999;
-            }
-
-            .graph th,
-            .graph td {
-                display: block;
-                text-align: center;
-            }
-
-            .graph tbody th {
-                position: absolute;
-                top: -3em;
-                left: 0;
-                width: 100%;
-                font-weight: normal;
-                text-align: center;
-                white-space: nowrap;
-                text-indent: 0;
-                transform: rotate(-45deg);
-            }
-
-            .graph tbody th:after {
-                content: "";
-            }
-
-            .graph td {
-                width: 100%;
-                height: 100%;
-                background: rgb(220, 148, 158);
-                border-radius: 0.5em 0.5em 0 0;
-                transition: background 0.5s;
-            }
-
-            .graph tr:hover td {
-                opacity: 0.7;
-            }
-
-            .graph td span {
-                overflow: hidden;
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                width: 0;
-                padding: 0.5em 0;
-                margin: -1em 0 0;
-                font: normal 85%/120% arial, helvetica, sans-serif;
-                /* 			background:white; */
-                /* 			box-shadow:0 0 0.25em rgba(0,0,0,0.6); */
-                font-weight: bold;
-                opacity: 0;
-                transition: opacity 0.5s;
-                color: white;
-            }
-
-            .toggleGraph:checked+table td span,
-            .graph tr:hover td span {
-                width: 4em;
-                margin-left: -2em;
-                /* 1/2 the declared width */
-                opacity: 1;
-            }
-
-        }
-
-    }
-
 </style>
 
 <head>
@@ -238,7 +158,7 @@
         {% if (results) %}
         <hr>
         {% if (is_predict_quality) %}
-        <h6>{{ results}} </h6>
+        <h6>{{results}} </h6>
 
         <p style="text-align: center; font-size: 40px;">Your wine has a quality of <mark
                 style="color: rgb(209, 85, 102); background-color: white;">{{ results["qualityScore"] }} </mark><mark
@@ -290,44 +210,40 @@
                     <td> {{ alcohol }}</td>
                 </tr>
             </table>
-            <table class="graph" style="width: 500px;">
-                <caption>Feature Importance Bar Chart</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Percent</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="fixedAcidityBar" style="height:12%">
-                        <th scope="row">Fixed acidity</th>
-                        <td><span>{{ (results["featureImportance"][0]*100 | int)}}%</span></td>
-                    </tr>
-                    <tr style="height:14%">
-                        <th scope="row">Volatile acidity</th>
-                        <td><span>{{ (results["featureImportance"][1]*100 | int)}}%</span></td>
-                    </tr>
-                    <tr style="height:12%">
-                        <th scope="row">Citric acid</th>
-                        <td><span>{{ (results["featureImportance"][2]*100 | int)}}%</span></td>
-                    </tr>
-                    <tr style="height:10%">
-                        <th scope="row">Free sulfer dioxide</th>
-                        <td><span>{{ (results["featureImportance"][3]*100 | int)}}%</span></td>
-                    </tr>
-                    <tr style="height:15%">
-                        <th scope="row">Total sulfer dioxide</th>
-                        <td><span>{{ (results["featureImportance"][4]*100 | int)}}%</span></td>
-                    </tr>
-                    <tr style="height:10%">
-                        <th scope="row">Sulfates</th>
-                        <td><span>{{ (results["featureImportance"][5]*100 | int)}}%</span></td>
-                    </tr>
-                    <tr style="height:19%">
-                        <th scope="row">Alcohol</th>
-                        <td><span>{{ (results["featureImportance"][6]*100 | int)}}%</span></td>
-                    </tr>
-                </tbody>
+            <table class="graph">
+                <div id="pieChartContainer">
+                    <div id="pieChart"></div>
+                    <div id="legenda">
+                        <div class="entry">
+                            <div id="color-brown" class="entry-color"></div>
+                            <div class="entry-text">Fixed acidity</div>
+                        </div>
+                        <div class="entry">
+                            <div id="color-black" class="entry-color"></div>
+                            <div class="entry-text">Volatile acidity</div>
+                        </div>
+                        <div class="entry">
+                            <div id="color-blue" class="entry-color"></div>
+                            <div class="entry-text">Citric acid</div>
+                        </div>
+                        <div class="entry">
+                            <div id="color-green" class="entry-color"></div>
+                            <div class="entry-text">Free sulfer dioxide</div>
+                        </div>
+                        <div class="entry">
+                            <div id="color-yellow" class="entry-color"></div>
+                            <div class="entry-text">Total sulfer dioxide</div>
+                        </div>
+                        <div class="entry">
+                            <div id="color-orange" class="entry-color"></div>
+                            <div class="entry-text">Sulfates</div>
+                        </div>
+                        <div class="entry">
+                            <div id="color-red" class="entry-color"></div>
+                            <div class="entry-text">Alcohol</div>
+                        </div>
+                    </div>
+                </div>
             </table>
         </div>
     </div>
