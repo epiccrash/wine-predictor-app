@@ -34,8 +34,8 @@ def enterQualityInfo():
     })
 
     # URL for model
-    url = "http://localhost:3000/api/getDonatedData"
-    # url = "https://wine-prediction-web-model.herokuapp.com/api/getDonatedData"
+    # url = "http://localhost:3000/api/getDonatedData"
+    url = "https://wine-prediction-web-model.herokuapp.com/api/getDonatedData"
   
     # Post to model
     results = requests.post(url, info)
@@ -68,8 +68,8 @@ def predictQuality():
     })
 
     # URL for model
-    url = "http://localhost:3000/api"
-    # url = "https://wine-prediction-web-model.herokuapp.com/api"
+    # url = "http://localhost:3000/api"
+    url = "https://wine-prediction-web-model.herokuapp.com/api"
   
     # Post to model
     results = requests.post(url, info)
