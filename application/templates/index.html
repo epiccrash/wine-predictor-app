@@ -46,6 +46,11 @@
         padding: 0.5rem 1rem;
     }
 
+    .resultTable {
+        border: 5px;
+        border-color: rgb(220, 148, 158);
+        border-style: ridge;
+    }
 </style>
 
 <head>
@@ -55,7 +60,7 @@
 <body>
     <div class="container">
         <br>
-        <h1 style="color:rgb(249, 187, 167);text-align:center">Wine Club</h1>
+        <h1 style="color:rgb(242, 171, 147);text-align:center">Wine Club</h1>
         <hr>
 
         <br>
@@ -80,36 +85,68 @@
         </div>
 
         {% if (results) %}
-            <hr>
-            {% if (is_predict_quality) %}
-            <h3>Your wine has a quality of {{ results["qualityScore"] }} (out of 10)</h3>
-            <p>This ranks it in the <strong>{{ (results["qualityRank"]*100) | int }}{% if ((((results["qualityRank"]*100) | int) | string) | last) == '1' %}st
-            {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '2' %}nd
-            {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '3' %}rd
-            {% else %}th
-            {% endif %}
+        <hr>
+        {% if (is_predict_quality) %}
+        <p style="text-align: center; font-size: 40px;">Your wine has a quality of <mark style="color: rgb(209, 85, 102); background-color: white;">{{ results["qualityScore"] }} </mark><mark style="font-size: 30px; background-color: white;">(out of 10)</mark></p>
+        <p style="text-align: center; font-size: 23px;">This ranks it in the <mark style="color: rgb(229, 181, 92); background-color: white;"><strong>{{ (results["qualityRank"]*100) | int }}{% if ((((results["qualityRank"]*100) |
+                int) | string) | last) == '1' %}st
+                {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '2' %}nd
+                {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '3' %}rd
+                {% else %}th
+                {% endif %}</mark>
             </strong> percentile.</p>
-            <div>
-                <h4>Based on:</h4>
-                <ul>
-                    <li>Fixed acidity: {{ fixedAcidity }}</li>
-                    <li>Volatile acidity: {{ volatileAcidity }}</li>
-                    <li>Citric acid: {{ citricAcid }}</li>
-                    <li>Free sulfur dioxide: {{ freeSulfurDioxide }}</li>
-                    <li>Total sulfur dioxide: {{ totalSulfurDioxide }}</li>
-                    <li>Sulfates: {{ sulfates }}</li>
-                    <li>Alcohol: {{ alcohol }}</li>
-                </ul>
-            </div>
-            {% else %}
-            <h3>{{ results }}</h3>
-            {% endif %}
-            <hr>
+        <div>
+            <table class="resultTable" style="text-align: center; margin-top:10px; margin-left:500px; width: 300px;">
+                <tr style="height: 50px;">
+                    <td style="width: 3px;"></td>
+                    <th style="width: 190px;"> Fixed acidity</th>
+                    <td>{{ fixedAcidity }}</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="width: 3px;"></td>
+                    <th style="width: 190px;"> Volatile acidity</th>
+                    <td>  {{ volatileAcidity }}</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="width: 3px;"></td>
+                    <th style="width: 190px;"> Citric acid</th>
+                    <td>  {{ citricAcid }}</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="width: 3px;"></td>
+                    <th style="width: 190px;"> Free sulfur dioxide</th>
+                    <td>  {{ freeSulfurDioxide }}</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="width: 3px;"></td>
+                    <th style="width: 190px;"> Total sulfur dioxide</th>
+                    <td>  {{ totalSulfurDioxide }}</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="width: 3px;"></td>
+                    <th style="width: 190px;"> Sulfates</th>
+                    <td>  {{ sulfates }}</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="width: 3px;"></td>
+                    <th style="width: 190px;"> Alcohol</th>
+                    <td>  {{ alcohol }}</td>
+                </tr>
+            </table>
+        </div>
+      </div> 
+    </div>
+    <br>
+        {% else %}
+        <h3>{{ results }}</h3>
+        {% endif %}
+        <hr>
         {% endif %}
 
         <div class="tab-content">
             <br>
-            <h4 style="text-align: center;">Enter -1 for a field which you lack data for.</h4>
+            <h6 style="text-align: center; color: rgb(160, 147, 149);">Enter -1 for a field which you lack data for.
+            </h6>
             <br>
             <div role="tabpanel" class="container tab-pane active" id="predictQuality">
                 <form action="{{ url_for('predictQuality') }}" method="POST">
@@ -165,16 +202,16 @@
                             </div>
                             <div class="form-check">
                                 <label>
-                                    <input id="white" class="form-check-input" name="wineType" type="radio" value="white"
-                                        checked></inputid>
+                                    <input id="white" class="form-check-input" name="wineType" type="radio"
+                                        value="white" checked></inputid>
                                     <span>White</span>
                                 </label>
                             </div>
                         </fieldset>
                         <br>
                         <div class="submit-button">
-                            <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;" type="submit"
-                                class="btn btn-primary">Get Prediction</button>
+                            <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;"
+                                type="submit" class="btn btn-primary">Get Prediction</button>
                         </div>
                     </div>
                 </form>
@@ -237,16 +274,16 @@
                             </div>
                             <div class="form-check">
                                 <label>
-                                    <input id="white" class="form-check-input" name="wineType" type="radio" value="white"
-                                        checked></inputid>
+                                    <input id="white" class="form-check-input" name="wineType" type="radio"
+                                        value="white" checked></inputid>
                                     <span>White</span>
                                 </label>
                             </div>
                         </fieldset>
                         <br>
                         <div class="submit-button">
-                            <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;" type="submit"
-                                class="btn btn-primary">Submit Data</button>
+                            <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;"
+                                type="submit" class="btn btn-primary">Submit Data</button>
                         </div>
                     </div>
                 </form>
