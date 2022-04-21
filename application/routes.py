@@ -34,13 +34,13 @@ def enterQualityInfo():
     })
 
     # URL for model
-    # url = "http://localhost:3000/api/getDonatedData"
-    url = "https://wine-prediction-web-model.herokuapp.com/api/getDonatedData"
+    url = "http://localhost:3000/api/getDonatedData"
+    # url = "https://wine-prediction-web-model.herokuapp.com/api/getDonatedData"
   
     # Post to model
     results = requests.post(url, info)
 
-    return render_template("index.html", is_data_entered=True, fixedAcidity = fixedAcidity, volatileAcidity = volatileAcidity, citricAcid = citricAcid, freeSulfurDioxide = freeSulfurDioxide, totalSulfurDioxide = totalSulfurDioxide, sulfates = sulfates, alcohol = alcohol, quality = quality, results=results)
+    return render_template("index.html", is_data_entered=True, fixedAcidity = fixedAcidity, volatileAcidity = volatileAcidity, citricAcid = citricAcid, freeSulfurDioxide = freeSulfurDioxide, totalSulfurDioxide = totalSulfurDioxide, sulfates = sulfates, alcohol = alcohol, quality = quality, results=results.content.decode('UTF-8'))
 
 
 @app.route("/predictQuality", methods=['GET', 'POST'])
@@ -68,8 +68,8 @@ def predictQuality():
     })
 
     # URL for model
-    # url = "http://localhost:3000/api"
-    url = "https://wine-prediction-web-model.herokuapp.com/api"
+    url = "http://localhost:3000/api"
+    # url = "https://wine-prediction-web-model.herokuapp.com/api"
   
     # Post to model
     results = requests.post(url, info)
