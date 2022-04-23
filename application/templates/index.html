@@ -112,7 +112,7 @@
             style="color: rgb(209, 85, 102); background-color: white;">{{ results["qualityScore"] }} </mark><mark
             style="font-size: 30px; background-color: white;">(out of 10)</mark></p>
     <p style="text-align: center; font-size: 23px;">This ranks it in the <mark
-            style="color: rgb(229, 181, 92); background-color: white;"><strong>{{ (results["qualityRank"]*100) | int
+            style="color: rgb(233, 175, 128); background-color: white;"><strong>{{ (results["qualityRank"]*100) | int
                 }}{% if ((((results["qualityRank"]*100) |
                 int) | string) | last) == '1' %}st
                 {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '2' %}nd
@@ -191,8 +191,17 @@
                         ['Alcohol', 20]
                     ]);
 
+
                     // Optional; add a title and set the width and height of the chart
-                    var options = { 'title': 'Feature Importance', 'width': 550, 'height': 400 };
+                    var options = {
+                        'title': 'Feature Importance', 'width': 600, 'height': 400, 'colors': ['#E45D74', '#E77580', '#EA8A8A', '#EEA798', '#F1BAA1', '#F4CBA9', '#F8E0B4'], 'is3D': true,
+                        chartArea: {width: '100%'},'legend': {
+                            'maxLines': 1,
+                            'textStyle': {
+                                'fontSize': 15
+                            }
+                        }
+                    };
 
                     // Display the chart inside the <div> element with id="piechart"
                     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
