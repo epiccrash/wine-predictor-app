@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <style>
-
     .all-divs {
         text-align: justify;
         display: flex;
@@ -10,8 +9,15 @@
         justify-content: center;
     }
 
+    hr {
+        border: solid 1px black;
+        width: 100%;
+        height: 1px;
+        margin: auto;
 
-    label>input[type="radio"] {
+    }
+
+    Share label>input[type="radio"] {
         display: none;
     }
 
@@ -53,74 +59,17 @@
         border-style: ridge;
     }
 
-
-    #pieChartContainer {
-        align-items: center;
-    }
-
-    #pieChart {
-        background: conic-gradient(brown 0.00%, black 0.00% 0.55%, blue 0.55% 6.08%, green 6.08% 13.68%, yellow 13.68% 23.27%, orange 23.27% 40.47%, red 40.47%);
-        border-radius: 50%;
-        width: 150px;
-        height: 150px;
-    }
-
-    #legenda {
-        margin-left: 20px;
-        background-color: white;
-        padding: 5px;
-    }
-
-    .entry {
-        display: flex;
-        align-items: center;
-    }
-
-    .entry-color {
-        height: 10px;
-        width: 10px;
-    }
-
-    .entry-text {
-        margin-left: 5px;
-    }
-
-    #color-red {
-        background-color: red;
-    }
-
-    #color-orange {
-        background-color: orange;
-    }
-
-    #color-yellow {
-        background-color: yellow;
-    }
-
-    #color-green {
-        background-color: green;
-    }
-
-    #color-blue {
-        background-color: blue;
-    }
-
-    #color-black {
-        background-color: black;
-    }
-
-    #color-brown {
-        background-color: brown;
-    }
-
     .column table.resultTable {
-        margin-left: auto;
-        margin-top: 10px;
+        align-items: center;
         display: inline-table;
     }
 
-    .column table.graph {
-        float: right;
+    .column {
+        align-items: center;
+        text-align: center;
+        float: left;
+        width: 50%;
+        padding: 5px;
     }
 </style>
 
@@ -154,103 +103,106 @@
                 </li>
             </ul>
         </div>
-
-        {% if (results) %}
-        <hr>
-        {% if (is_predict_quality) %}
-        <h6>{{results}} </h6>
-
-        <p style="text-align: center; font-size: 40px;">Your wine has a quality of <mark
-                style="color: rgb(209, 85, 102); background-color: white;">{{ results["qualityScore"] }} </mark><mark
-                style="font-size: 30px; background-color: white;">(out of 10)</mark></p>
-        <p style="text-align: center; font-size: 23px;">This ranks it in the <mark
-                style="color: rgb(229, 181, 92); background-color: white;"><strong>{{ (results["qualityRank"]*100) | int
-                    }}{% if ((((results["qualityRank"]*100) |
-                    int) | string) | last) == '1' %}st
-                    {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '2' %}nd
-                    {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '3' %}rd
-                    {% else %}th
-                    {% endif %}</mark>
-            </strong> percentile.</p>
-        <div class="column">
-            <table class="resultTable" style="text-align: center; width: 300px;">
-                <tr style="height: 50px;">
-                    <td style="width: 3px;"></td>
-                    <th style="width: 190px;"> Fixed acidity</th>
-                    <td>{{ fixedAcidity }}</td>
-                </tr>
-                <tr style="height: 50px;">
-                    <td style="width: 3px;"></td>
-                    <th style="width: 190px;"> Volatile acidity</th>
-                    <td> {{ volatileAcidity }}</td>
-                </tr>
-                <tr style="height: 50px;">
-                    <td style="width: 3px;"></td>
-                    <th style="width: 190px;"> Citric acid</th>
-                    <td> {{ citricAcid }}</td>
-                </tr>
-                <tr style="height: 50px;">
-                    <td style="width: 3px;"></td>
-                    <th style="width: 190px;"> Free sulfur dioxide</th>
-                    <td> {{ freeSulfurDioxide }}</td>
-                </tr>
-                <tr style="height: 50px;">
-                    <td style="width: 3px;"></td>
-                    <th style="width: 190px;"> Total sulfur dioxide</th>
-                    <td> {{ totalSulfurDioxide }}</td>
-                </tr>
-                <tr style="height: 50px;">
-                    <td style="width: 3px;"></td>
-                    <th style="width: 190px;"> Sulfates</th>
-                    <td> {{ sulfates }}</td>
-                </tr>
-                <tr style="height: 50px;">
-                    <td style="width: 3px;"></td>
-                    <th style="width: 190px;"> Alcohol</th>
-                    <td> {{ alcohol }}</td>
-                </tr>
-            </table>
-            <table class="graph">
-                <div id="pieChartContainer">
-                    <div id="pieChart"></div>
-                    <div id="legenda">
-                        <div class="entry">
-                            <div id="color-brown" class="entry-color"></div>
-                            <div class="entry-text">Fixed acidity</div>
-                        </div>
-                        <div class="entry">
-                            <div id="color-black" class="entry-color"></div>
-                            <div class="entry-text">Volatile acidity</div>
-                        </div>
-                        <div class="entry">
-                            <div id="color-blue" class="entry-color"></div>
-                            <div class="entry-text">Citric acid</div>
-                        </div>
-                        <div class="entry">
-                            <div id="color-green" class="entry-color"></div>
-                            <div class="entry-text">Free sulfer dioxide</div>
-                        </div>
-                        <div class="entry">
-                            <div id="color-yellow" class="entry-color"></div>
-                            <div class="entry-text">Total sulfer dioxide</div>
-                        </div>
-                        <div class="entry">
-                            <div id="color-orange" class="entry-color"></div>
-                            <div class="entry-text">Sulfates</div>
-                        </div>
-                        <div class="entry">
-                            <div id="color-red" class="entry-color"></div>
-                            <div class="entry-text">Alcohol</div>
-                        </div>
-                    </div>
-                </div>
-            </table>
-        </div>
     </div>
+
+    {% if (results) %}
+    <hr>
+    {% if (is_predict_quality) %}
+    <p style="text-align: center; font-size: 40px;">Your wine has a quality of <mark
+            style="color: rgb(209, 85, 102); background-color: white;">{{ results["qualityScore"] }} </mark><mark
+            style="font-size: 30px; background-color: white;">(out of 10)</mark></p>
+    <p style="text-align: center; font-size: 23px;">This ranks it in the <mark
+            style="color: rgb(229, 181, 92); background-color: white;"><strong>{{ (results["qualityRank"]*100) | int
+                }}{% if ((((results["qualityRank"]*100) |
+                int) | string) | last) == '1' %}st
+                {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '2' %}nd
+                {% elif ((((results["qualityRank"]*100) | int) | string) | last) == '3' %}rd
+                {% else %}th
+                {% endif %}</mark>
+        </strong> percentile.</p>
+    <div class="column">
+        <table class="resultTable" style="text-align: center; width: 300px;">
+            <tr style="height: 50px;">
+                <td style="width: 3px;"></td>
+                <th style="width: 190px;"> Fixed acidity</th>
+                <td>{{ fixedAcidity }}</td>
+            </tr>
+            <tr style="height: 50px;">
+                <td style="width: 3px;"></td>
+                <th style="width: 190px;"> Volatile acidity</th>
+                <td> {{ volatileAcidity }}</td>
+            </tr>
+            <tr style="height: 50px;">
+                <td style="width: 3px;"></td>
+                <th style="width: 190px;"> Citric acid</th>
+                <td> {{ citricAcid }}</td>
+            </tr>
+            <tr style="height: 50px;">
+                <td style="width: 3px;"></td>
+                <th style="width: 190px;"> Free sulfur dioxide</th>
+                <td> {{ freeSulfurDioxide }}</td>
+            </tr>
+            <tr style="height: 50px;">
+                <td style="width: 3px;"></td>
+                <th style="width: 190px;"> Total sulfur dioxide</th>
+                <td> {{ totalSulfurDioxide }}</td>
+            </tr>
+            <tr style="height: 50px;">
+                <td style="width: 3px;"></td>
+                <th style="width: 190px;"> Sulfates</th>
+                <td> {{ sulfates }}</td>
+            </tr>
+            <tr style="height: 50px;">
+                <td style="width: 3px;"></td>
+                <th style="width: 190px;"> Alcohol</th>
+                <td> {{ alcohol }}</td>
+            </tr>
+        </table>
     </div>
-    <br>
+    <div class="column">
+        <table>
+            <div id="piechart"></div>
+
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+            <script type="text/javascript">
+                // Load google charts
+                google.charts.load('current', { 'packages': ['corechart'] });
+                google.charts.setOnLoadCallback(drawChart);
+
+                var fixed = '{{results["featureImportance"][0]}}';
+                var volatile = '{{results["featureImportance"][1]}}';
+                var citric = '{{results["featureImportance"][2]}}';
+                var dioxide = '{{results["featureImportance"][3]}}';
+                var totalDioxide = '{{results["featureImportance"][4]}}';
+                var sulfate = '{{results["featureImportance"][5]}}';
+                var alc = '{{results["featureImportance"][6]}}';
+
+                // Draw the chart and set the chart values
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Feature Importance', 'Percentage'],
+                        ['Fixed Acidity', 12],
+                        ['Volatile Acidity', 15],
+                        ['Citric acid', 12],
+                        ['Free sulfer dioxide', 11],
+                        ['Total sulfer dioxode', 15],
+                        ['Sulfates', 15],
+                        ['Alcohol', 20]
+                    ]);
+
+                    // Optional; add a title and set the width and height of the chart
+                    var options = { 'title': 'Feature Importance', 'width': 550, 'height': 400 };
+
+                    // Display the chart inside the <div> element with id="piechart"
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                    chart.draw(data, options);
+                }
+            </script>
+        </table>
+    </div>
     {% else %}
-    <h3>{{ results }}</h3>
+    <h3 style="text-align: center;">{{ results }}</h3>
     {% endif %}
     <hr>
     {% endif %}
