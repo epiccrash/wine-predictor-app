@@ -7,6 +7,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     hr {
@@ -17,40 +19,67 @@
 
     }
 
-    Share label>input[type="radio"] {
+    .radioButton {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default radio button */
+    .radioButton input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Create a custom radio button */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #eee;
+        border-radius: 50%;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .radioButton:hover input~.checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the radio button is checked, add a blue background */
+    .radioButton input:checked~.checkmark {
+        background-color: rgb(209, 85, 102);
+    }
+
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
         display: none;
     }
 
-    label>input[type="radio"]+*::before {
-        content: "";
-        display: inline-block;
-        vertical-align: bottom;
-        width: 1rem;
-        height: 1rem;
-        margin-right: 0.3rem;
+    /* Show the indicator (dot/circle) when checked */
+    .radioButton input:checked~.checkmark:after {
+        display: block;
+    }
+
+    /* Style the indicator (dot/circle) */
+    .radioButton .checkmark:after {
+        top: 9px;
+        left: 9px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
-        border-style: solid;
-        border-width: 0.1rem;
-        border-color: gray;
-    }
-
-    label>input[type="radio"]:checked+*::before {
-        background: radial-gradient(rgb(209, 85, 102) 0%, rgb(209, 85, 102) 40%, transparent 50%, transparent);
-        border-color: rgb(209, 85, 102);
-    }
-
-    label>input[type="radio"]:checked+* {
-        color: rgb(209, 85, 102);
-    }
-
-    fieldset {
-        margin: 20px;
-        max-width: 400px;
-    }
-
-    label>input[type="radio"]+* {
-        display: inline-block;
-        padding: 0.5rem 1rem;
+        background: white;
     }
 
     .resultTable {
@@ -70,6 +99,11 @@
         float: left;
         width: 50%;
         padding: 5px;
+    }
+
+    table.inputTable {
+        margin-left: auto;
+        margin-right: auto;
     }
 </style>
 
@@ -170,13 +204,13 @@
                 google.charts.load('current', { 'packages': ['corechart'] });
                 google.charts.setOnLoadCallback(drawChart);
 
-                var fixed = '{{results["featureImportance"][0]}}';
-                var volatile = '{{results["featureImportance"][1]}}';
-                var citric = '{{results["featureImportance"][2]}}';
-                var dioxide = '{{results["featureImportance"][3]}}';
-                var totalDioxide = '{{results["featureImportance"][4]}}';
-                var sulfate = '{{results["featureImportance"][5]}}';
-                var alc = '{{results["featureImportance"][6]}}';
+                var fixed = '{{results["featureImportance"][0]*100}}';
+                var volatile = '{{results["featureImportance"][1]*100}}';
+                var citric = '{{results["featureImportance"][2]*100}}';
+                var dioxide = '{{results["featureImportance"][3]*100}}';
+                var totalDioxide = '{{results["featureImportance"][4]*100}}';
+                var sulfate = '{{results["featureImportance"][5]*100}}';
+                var alc = '{{results["featureImportance"][6]*100}}';
 
                 // Draw the chart and set the chart values
                 function drawChart() {
@@ -190,12 +224,10 @@
                         ['Sulfates', 15],
                         ['Alcohol', 20]
                     ]);
-
-
                     // Optional; add a title and set the width and height of the chart
                     var options = {
                         'title': 'Feature Importance', 'width': 600, 'height': 400, 'colors': ['#E45D74', '#E77580', '#EA8A8A', '#EEA798', '#F1BAA1', '#F4CBA9', '#F8E0B4'], 'is3D': true,
-                        chartArea: {width: '100%'},'legend': {
+                        chartArea: { width: '100%' }, 'legend': {
                             'maxLines': 1,
                             'textStyle': {
                                 'fontSize': 15
@@ -213,17 +245,15 @@
     {% else %}
     <h3 style="text-align: center;">{{ results }}</h3>
     {% endif %}
-    <hr>
     {% endif %}
-
+    <hr>
     <div class="tab-content">
-        <br>
         <h6 style="text-align: center; color: rgb(160, 147, 149);">Enter -1 for a field which you lack data for.
         </h6>
         <br>
         <div role="tabpanel" class="container tab-pane active" id="predictQuality">
             <form action="{{ url_for('predictQuality') }}" method="POST">
-                <table>
+                <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="fixedAcidity" class="form-label" style="text-align: center;">Fixed
                             acidity</label>
@@ -246,7 +276,7 @@
                             min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                 </table>
-                <table>
+                <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
                         <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number"
@@ -262,26 +292,20 @@
                         <input id="alcohol" class="form-control" name="alcohol" type="number" min="-1" max="100"
                             placeholder="0-100 (example: 67)" value="-1">
                     </th>
+                    <th style="width: 300px; text-align: center;"></th>
                 </table>
                 <br>
                 <div class="all-divs">
-                    <fieldset>
-                        <div class="form-check">
-                            <label>
-                                <input id="red" class="form-check-input" name="wineType" type="radio" value="red"
-                                    checked></inputid>
-                                <span>Red</span>
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label>
-                                <input id="white" class="form-check-input" name="wineType" type="radio" value="white"
-                                    checked></inputid>
-                                <span>White</span>
-                            </label>
-                        </div>
-                    </fieldset>
-                    <br>
+                    <label class="radioButton">Red
+                        <input id="red" class="form-check-input" name="wineType" type="radio" value="red" checked>
+                        </inputid>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radioButton">White
+                        <input id="white" class="form-check-input" name="wineType" type="radio" value="white" checked>
+                        </inputid>
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="submit-button">
                         <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;" type="submit"
                             class="btn btn-primary">Get Prediction</button>
@@ -291,7 +315,7 @@
         </div>
         <div role="tabpanel" class="container tab-pane" id="enterQualityInfo">
             <form action="{{ url_for('enterQualityInfo') }}" method="POST">
-                <table>
+                <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="fixedAcidity" class="form-label">Fixed acidity</label>
                         <input id="fixedAcidity" class="form-control" type="number" min="-1" max="10.0"
@@ -313,7 +337,7 @@
                             placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                 </table>
-                <table>
+                <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
                         <input id="totalSulfurDioxide" class="form-control" type="number" min="-1" max="10.0"
@@ -337,23 +361,17 @@
                 </table>
                 <br>
                 <div class="all-divs">
-                    <fieldset>
-                        <div class="form-check">
-                            <label>
-                                <input id="red" class="form-check-input" name="wineType" type="radio" value="red"
-                                    checked></inputid>
-                                <span>Red</span>
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label>
-                                <input id="white" class="form-check-input" name="wineType" type="radio" value="white"
-                                    checked></inputid>
-                                <span>White</span>
-                            </label>
-                        </div>
-                    </fieldset>
-                    <br>
+                    <label class="radioButton">Red
+                        <input id="red" class="form-check-input" name="wineType" type="radio" value="red" checked>
+                        </inputid>
+                        <span class="checkmark"></span>
+                    </label>
+
+                    <label class="radioButton">White
+                        <input id="white" class="form-check-input" name="wineType" type="radio" value="white" checked>
+                        </inputid>
+                        <span class="checkmark"></span>
+                    </label>
                     <div class="submit-button">
                         <button style="background-color: rgb(209, 85, 102); border: 0cm; width: 200px;" type="submit"
                             class="btn btn-primary">Submit Data</button>
