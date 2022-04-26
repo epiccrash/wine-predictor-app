@@ -78,7 +78,6 @@ def predictQuality():
 
     info = json.loads(info)
     if (wineType == 'red'):
-        print(request.form.get("citricAcid"))
         citricAcid = float(request.form.get("citricAcid"))
         sulfates = float(request.form.get("sulfates"))
         info["citricAcid"] = citricAcid
