@@ -107,6 +107,13 @@
     }
 </style>
 
+<script>
+    function toggleFields(toggleOn, toggleOff) {
+        document.getElementById(toggleOn).style.display = "table-cell";
+        document.getElementById(toggleOff).style.display = "none";
+    }
+</script>
+
 <head>
     <title>Wine Club</title>
 </head>
@@ -149,7 +156,7 @@
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
                 <th style="width: 190px;"> Citric acid</th>
-                <td> {{ citricAcid }}</td>
+                <td> {{ citricAcid }} </td>
             </tr>
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
@@ -264,9 +271,14 @@
                         <input id="volatileAcidity" class="form-control" name="volatileAcidity" type="number" min="-1"
                             max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
-                    <th style="width: 300px; text-align: center;">
+                    <th id="citricAcid-toggle" style="width: 300px; text-align: center;">
                         <label for="citricAcid" class="form-label">Citric acid</label>
                         <input id="citricAcid" class="form-control" name="citricAcid" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th id="residualSugar-toggle" style="width: 300px; text-align: center; display: none;">
+                        <label for="residualSugar" class="form-label">Residual sugar</label>
+                        <input id="residualSugar" class="form-control" name="residualSugar" type="number" min="-1" max="10.0"
                             placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th style="width: 300px; text-align: center;">
@@ -281,9 +293,14 @@
                         <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number"
                             min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
-                    <th style="width: 300px; text-align: center;">
+                    <th id="sulfates-toggle" style="width: 300px; text-align: center;">
                         <label for="sulfates" class="form-label">Sulfates</label>
                         <input id="sulfates" class="form-control" name="sulfates" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th id="chlorides-toggle" style="width: 300px; text-align: center; display: none;">
+                        <label for="chlorides" class="form-label">Chlorides</label>
+                        <input id="chlorides" class="form-control" name="chlorides" type="number" min="-1" max="10.0"
                             placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th style="width: 300px; text-align: center;">
@@ -295,12 +312,13 @@
                 </table>
                 <br>
                 <div class="all-divs">
-                    <label class="radioButton">Red
+                    <label class="radioButton" onclick="toggleFields('sulfates-toggle', 'chlorides-toggle'); toggleFields('citricAcid-toggle', 'residualSugar-toggle');">Red
                         <input id="red" class="form-check-input" name="wineType" type="radio" value="red" checked="checked">
                         </inputid>
                         <span class="checkmark"></span>
                     </label>
-                    <label class="radioButton">White
+
+                    <label class="radioButton" onclick="toggleFields('chlorides-toggle', 'sulfates-toggle'); toggleFields('residualSugar-toggle', 'citricAcid-toggle');">White
                         <input id="white" class="form-check-input" name="wineType" type="radio" value="white">
                         </inputid>
                         <span class="checkmark"></span>
@@ -319,56 +337,66 @@
                 <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="fixedAcidity" class="form-label">Fixed acidity</label>
-                        <input id="fixedAcidity" class="form-control" type="number" min="-1" max="10.0"
+                        <input id="fixedAcidity" class="form-control" name="fixedAcidity" type="number" min="-1" max="10.0"
                             placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="volatileAcidity" class="form-label">Volatile acidity</label>
-                        <input id="volatileAcidity" class="form-control" type="number" min="-1" max="10.0"
+                        <input id="volatileAcidity" class="form-control" name="volatileAcidity" type="number" min="-1" max="10.0"
                             placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
-                    <th style="width: 300px; text-align: center;">
+                    <th id="citricAcid-toggle2" style="width: 300px; text-align: center;">
                         <label for="citricAcid" class="form-label">Citric acid</label>
-                        <input id="citricAcid" class="form-control" type="number" min="-1" max="10.0"
+                        <input id="citricAcid" class="form-control" name="citricAcid" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th id="residualSugar-toggle2" style="width: 300px; text-align: center; display: none;">
+                        <label for="residualSugar" class="form-label">Residual sugar</label>
+                        <input id="residualSugar" class="form-control" name="residualSugar" type="number" min="-1" max="10.0"
                             placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
-                        <input id="freeSulfurDioxide" class="form-control" type="number" min="-1" max="10.0"
+                        <input id="freeSulfurDioxide" class="form-control" name="freeSulfurDioxide" type="number" min="-1" max="10.0"
                             placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                 </table>
                 <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
-                        <input id="totalSulfurDioxide" class="form-control" type="number" min="-1" max="10.0"
+                        <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number" min="-1" max="10.0"
                             placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
-                    <th style="width: 300px; text-align: center;">
+                    <th id="sulfates-toggle2" style="width: 300px; text-align: center;">
                         <label for="sulfates" class="form-label">Sulfates</label>
-                        <input id="sulfates" class="form-control" type="number" min="-1" max="10.0"
+                        <input id="sulfates" class="form-control" name="sulfates" type="number" min="-1" max="10.0"
+                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                    </th>
+                    <th id="chlorides-toggle2" style="width: 300px; text-align: center; display: none;">
+                        <label for="chlorides" class="form-label">Chlorides</label>
+                        <input id="chlorides" class="form-control" name="chlorides" type="number" min="-1" max="10.0"
                             placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="alcohol" class="form-label">Alcohol</label>
-                        <input id="alcohol" class="form-control" type="number" min="-1" max="100"
+                        <input id="alcohol" class="form-control" name="alcohol" type="number" min="-1" max="100"
                             placeholder="0-100 (example: 67)" value="-1">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="quality" class="form-label">Quality</label>
-                        <input id="quality" class="form-control" type="number" min="0" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" step="0.1" required>
+                        <input id="quality" class="form-control" name="quality" type="number" min="0" max="10"
+                            placeholder="0-10 (example: 5)" step="1" required>
                     </th>
                 </table>
                 <br>
                 <div class="all-divs">
-                    <label class="radioButton">Red
+                    <label class="radioButton" onclick="toggleFields('sulfates-toggle2', 'chlorides-toggle2'); toggleFields('citricAcid-toggle2', 'residualSugar-toggle2');">Red
                         <input id="red" class="form-check-input" name="wineType" type="radio" value="red" checked="checked">
                         </inputid>
                         <span class="checkmark"></span>
                     </label>
 
-                    <label class="radioButton">White
+                    <label class="radioButton" onclick="toggleFields('chlorides-toggle2', 'sulfates-toggle2'); toggleFields('residualSugar-toggle2', 'citricAcid-toggle2');">White
                         <input id="white" class="form-check-input" name="wineType" type="radio" value="white">
                         </inputid>
                         <span class="checkmark"></span>
