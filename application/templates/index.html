@@ -98,7 +98,7 @@
         text-align: center;
         float: left;
         width: 50%;
-        padding: 5px;
+        padding: 10px;
     }
 
     table.inputTable {
@@ -144,7 +144,7 @@
                 {% endif %}</mark>
         </strong> percentile.</p>
 
-    <div class="all-divs">
+    <div class="column">
         <table>
             <div id="stackBarChart"></div>
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -177,26 +177,26 @@
                         title: 'Percentage distribution of quality (Red Wine)',
                         legend: { position: 'none' },
                         isStacked: 'percent',
-                        colors: ['#81bfe4', '#80b8df', '#7fb4dd', '#7eafd9', '#7ba4d2', '#7898ca', '#758cc2', '#6e6cad', '#6b60a5', '#68549d', '#654493'],
+                        colors: ['#ffc799', '#fab492', '#f6a48d', '#eb777d', '#e86a79', '#cc4f68', '#b13f5a', '#942e4b', '#741b3b', '#6c1637', '#470024'],
                         hAxis: {
                             minValue: 0,
                             ticks: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]
                         },
                         height: 200,
-                        width: 800,
+                        width: 700,
                     };
 
                     var optionsWhite = {
                         title: 'Percentage distribution of quality (White Wine)',
                         legend: { position: 'none' },
                         isStacked: 'percent',
-                        colors: ['#81bfe4', '#80b8df', '#7fb4dd', '#7eafd9', '#7ba4d2', '#7898ca', '#758cc2', '#6e6cad', '#6b60a5', '#68549d', '#654493'],
+                        colors: ['#ffc799', '#fab492', '#f6a48d', '#eb777d', '#e86a79', '#cc4f68', '#b13f5a', '#942e4b', '#741b3b', '#6c1637', '#470024'],
                         hAxis: {
                             minValue: 0,
                             ticks: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]
                         },
                         height: 200,
-                        width: 800,
+                        width: 700,
                     };
 
                     var chart = new google.visualization.BarChart(document.getElementById('stackBarChart'));
@@ -232,7 +232,79 @@
         </table>
     </div>
 
-    <div class="all-divs">
+    <div class="column">
+        <table>
+            <div id="barChart"></div>
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script>
+                google.charts.load('current', { 'packages': ['corechart'] });
+                google.charts.setOnLoadCallback(drawChart);
+
+                var zero = '{{results["allQualityScoresFreq"]["0.0"]}}';
+                var one = '{{results["allQualityScoresFreq"]["1.0"]}}';
+                var two = '{{results["allQualityScoresFreq"]["2.0"]}}';
+                var three = '{{results["allQualityScoresFreq"]["3.0"]}}';
+                var four = '{{results["allQualityScoresFreq"]["4.0"]}}';
+                var five = '{{results["allQualityScoresFreq"]["5.0"]}}';
+                var six = '{{results["allQualityScoresFreq"]["6.0"]}}';
+                var seven = '{{results["allQualityScoresFreq"]["7.0"]}}';
+                var eight = '{{results["allQualityScoresFreq"]["8.0"]}}';
+                var nine = '{{results["allQualityScoresFreq"]["9.0"]}}';
+                var ten = '{{results["allQualityScoresFreq"]["10.0"]}}';
+
+                const array = [parseInt(zero), parseInt(one), parseInt(two), parseInt(three), parseInt(four), parseInt(five), parseInt(six), parseInt(seven), parseInt(eight), parseInt(nine), parseInt(ten)];
+                let sum = 0;
+                for (let i = 0; i < array.length; i++) {
+                    if (isNaN(array[i])) {
+                        array[i] = 0.0;
+                    }
+                    sum += array[i];
+                }
+
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Quality', 'Frequency', { role: 'annotation' }, {role: 'style'}],
+                        ['0.0', parseInt(zero), zero + ' ( ' + (parseFloat((parseInt(array[0]) / sum)) * 100).toFixed(2) + '% )', '#ffc799'],
+                        ['1.0', parseInt(one), one + ' ( ' + (parseFloat((parseInt(array[1]) / sum)) * 100).toFixed(2) + '% )', '#fab492'],
+                        ['2.0', parseInt(two), two + ' ( ' + (parseFloat((parseInt(array[2]) / sum)) * 100).toFixed(2) + '% )', '#f6a48d'],
+                        ['3.0', parseInt(three), three + ' ( ' + (parseFloat((parseInt(array[3]) / sum)) * 100).toFixed(2) + '% )', '#eb777d'],
+                        ['4.0', parseInt(four), four + ' ( ' + (parseFloat((parseInt(array[4]) / sum)) * 100).toFixed(2) + '% )', '#e86a79'],
+                        ['5.0', parseInt(five), five + ' ( ' + (parseFloat((parseInt(array[5]) / sum)) * 100).toFixed(2) + '% )', '#cc4f68'],
+                        ['6.0', parseInt(six), six + ' ( ' + (parseFloat((parseInt(array[6]) / sum)) * 100).toFixed(2) + '% )', '#b13f5a'],
+                        ['7.0', parseInt(seven), seven + ' ( ' + (parseFloat((parseInt(array[7]) / sum)) * 100).toFixed(2) + '% )', '#942e4b'],
+                        ['8.0', parseInt(eight), eight + ' ( ' + (parseFloat((parseInt(array[8]) / sum)) * 100).toFixed(2) + '% )', '#741b3b'],
+                        ['9.0', parseInt(nine), nine + ' ( ' + (parseFloat((parseInt(array[9]) / sum)) * 100).toFixed(2) + '% )', '#6c1637'],
+                        ['10.0', parseInt(ten), ten + ' ( ' + (parseFloat((parseInt(array[10]) / sum)) * 100).toFixed(2) + '% )', '#470024']
+                    ]);
+
+                    var optionsRed = {
+                        title: 'Quality Score Distributions (Red Wine)',
+                       
+                        legend: { position: 'none' },
+                        width: 500,
+                        height: 300
+                    };
+
+                    var optionsWhite = {
+                        title: 'Quality Score Distributions (White Wine)',
+                        
+                        legend: { position: 'none' },
+                        width: 500,
+                        height: 300
+                    };
+
+                    var chart = new google.visualization.BarChart(document.getElementById('barChart'));
+                    if ('{{info["wineType"]}}' == 'red') {
+                        chart.draw(data, optionsRed);
+                    } else {
+                        chart.draw(data, optionsWhite);
+                    }
+                }
+            </script>
+        </table>
+    </div>
+
+    <div class="column">
         <table class="resultTable" style="text-align: center; width: 300px;">
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
@@ -346,78 +418,6 @@
                         chart.draw(dataWhite, options);
                     }
 
-                }
-            </script>
-        </table>
-    </div>
-
-    <div class="column">
-        <table>
-            <div id="barChart"></div>
-            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-            <script>
-                google.charts.load('current', { 'packages': ['corechart'] });
-                google.charts.setOnLoadCallback(drawChart);
-
-                var zero = '{{results["allQualityScoresFreq"]["0.0"]}}';
-                var one = '{{results["allQualityScoresFreq"]["1.0"]}}';
-                var two = '{{results["allQualityScoresFreq"]["2.0"]}}';
-                var three = '{{results["allQualityScoresFreq"]["3.0"]}}';
-                var four = '{{results["allQualityScoresFreq"]["4.0"]}}';
-                var five = '{{results["allQualityScoresFreq"]["5.0"]}}';
-                var six = '{{results["allQualityScoresFreq"]["6.0"]}}';
-                var seven = '{{results["allQualityScoresFreq"]["7.0"]}}';
-                var eight = '{{results["allQualityScoresFreq"]["8.0"]}}';
-                var nine = '{{results["allQualityScoresFreq"]["9.0"]}}';
-                var ten = '{{results["allQualityScoresFreq"]["10.0"]}}';
-
-                const array = [parseInt(zero), parseInt(one), parseInt(two), parseInt(three), parseInt(four), parseInt(five), parseInt(six), parseInt(seven), parseInt(eight), parseInt(nine), parseInt(ten)];
-                let sum = 0;
-                for (let i = 0; i < array.length; i++) {
-                    if (isNaN(array[i])) {
-                        array[i] = 0.0;
-                    }
-                    sum += array[i];
-                }
-
-                function drawChart() {
-                    var data = google.visualization.arrayToDataTable([
-                        ['Quality', 'Frequency', { role: 'annotation' }],
-                        ['0.0', parseInt(zero), zero + ' ( ' + (parseFloat((parseInt(array[0]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['1.0', parseInt(one), one + ' ( ' + (parseFloat((parseInt(array[1]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['2.0', parseInt(two), two + ' ( ' + (parseFloat((parseInt(array[2]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['3.0', parseInt(three), three + ' ( ' + (parseFloat((parseInt(array[3]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['4.0', parseInt(four), four + ' ( ' + (parseFloat((parseInt(array[4]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['5.0', parseInt(five), five + ' ( ' + (parseFloat((parseInt(array[5]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['6.0', parseInt(six), six + ' ( ' + (parseFloat((parseInt(array[6]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['7.0', parseInt(seven), seven + ' ( ' + (parseFloat((parseInt(array[7]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['8.0', parseInt(eight), eight + ' ( ' + (parseFloat((parseInt(array[8]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['9.0', parseInt(nine), nine + ' ( ' + (parseFloat((parseInt(array[9]) / sum)) * 100).toFixed(2) + '% )'],
-                        ['10.0', parseInt(ten), ten + ' ( ' + (parseFloat((parseInt(array[10]) / sum)) * 100).toFixed(2) + '% )']
-                    ]);
-
-                    var optionsRed = {
-                        title: 'Quality Score Distributions (Red Wine)',
-                        colors: ['#62398b'],
-                        legend: { position: 'none' },
-                        width: 600,
-                        height: 400
-                    };
-
-                    var optionsWhite = {
-                        title: 'Quality Score Distributions (White Wine)',
-                        colors: ['#62398b'],
-                        legend: { position: 'none' },
-                        width: 600,
-                        height: 300
-                    };
-
-                    var chart = new google.visualization.BarChart(document.getElementById('barChart'));
-                    if ('{{info["wineType"]}}' == 'red') {
-                        chart.draw(data, optionsRed);
-                    } else {
-                        chart.draw(data, optionsWhite);
-                    }
                 }
             </script>
         </table>
