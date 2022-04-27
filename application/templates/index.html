@@ -340,23 +340,23 @@
                 function drawChart() {
                     var dataRed = google.visualization.arrayToDataTable([
                         ['Feature Importance', 'Percentage'],
-                        ['Fixed Acidity', parseFloat(fixed)],
-                        ['Volatile Acidity', parseFloat(volatile)],
+                        ['Fixed acidity', parseFloat(fixed)],
+                        ['Volatile acidity', parseFloat(volatile)],
                         ['Citric acid', parseFloat(citricOrSugar)],
-                        ['Free sulfer dioxide', parseFloat(dioxideOrChloride)],
-                        ['Total sulfer dioxode', parseFloat(totalDioxideOrDioxide)],
+                        ['Free sulfur dioxide', parseFloat(dioxideOrChloride)],
+                        ['Total sulfur dioxode', parseFloat(totalDioxideOrDioxide)],
                         ['Sulfates', parseFloat(sulfateOrTotalDioxide)],
                         ['Alcohol', parseFloat(alc)]
                     ]);
 
                     var dataWhite = google.visualization.arrayToDataTable([
                         ['Feature Importance', 'Percentage'],
-                        ['Fixed Acidity', parseFloat(fixed)],
-                        ['Volatile Acidity', parseFloat(volatile)],
-                        ['Residual Sugar', parseFloat(citricOrSugar)],
+                        ['Fixed acidity', parseFloat(fixed)],
+                        ['Volatile acidity', parseFloat(volatile)],
+                        ['Residual sugar', parseFloat(citricOrSugar)],
                         ['Chlorides', parseFloat(dioxideOrChloride)],
-                        ['Free sulfer dioxode', parseFloat(totalDioxideOrDioxide)],
-                        ['Total sulfer dioxode', parseFloat(sulfateOrTotalDioxide)],
+                        ['Free sulfur dioxode', parseFloat(totalDioxideOrDioxide)],
+                        ['Total sulfur dioxode', parseFloat(sulfateOrTotalDioxide)],
                         ['Alcohol', parseFloat(alc)]
                     ]);
                     // Optional; add a title and set the width and height of the chart
@@ -476,49 +476,49 @@
                         <label for="fixedAcidity" class="form-label" style="text-align: center;">Fixed
                             acidity</label>
                         <input id="fixedAcidity" class="form-control" name="fixedAcidity" type="number" min="-1"
-                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            placeholder="Example: 5.5" value="-1" step="0.01">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="volatileAcidity" class="form-label">Volatile acidity</label>
                         <input id="volatileAcidity" class="form-control" name="volatileAcidity" type="number" min="-1"
-                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            placeholder="Example: 5.5" value="-1" step="0.01">
                     </th>
                     <th id="citricAcid-toggle" style="width: 300px; text-align: center;">
                         <label for="citricAcid" class="form-label">Citric acid</label>
-                        <input id="citricAcid" class="form-control" name="citricAcid" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="citricAcid" class="form-control" name="citricAcid" type="number" min="-1" max="1"
+                            placeholder="0-1.0 (example: 0.5)" value="-1" step="0.01">
                     </th>
                     <th id="residualSugar-toggle" style="width: 300px; text-align: center; display: none;">
                         <label for="residualSugar" class="form-label">Residual sugar</label>
                         <input id="residualSugar" class="form-control" name="residualSugar" type="number" min="-1"
-                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            placeholder="Example: 5.5" value="-1" step="0.01">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
                         <input id="freeSulfurDioxide" class="form-control" name="freeSulfurDioxide" type="number"
-                            min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            min="-1" placeholder="Example: 55" value="-1" step="0.01">
                     </th>
                 </table>
                 <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
                         <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number"
-                            min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            min="-1" placeholder="Example: 55" value="-1" step="0.01">
                     </th>
                     <th id="sulfates-toggle" style="width: 300px; text-align: center;">
                         <label for="sulfates" class="form-label">Sulfates</label>
-                        <input id="sulfates" class="form-control" name="sulfates" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="sulfates" class="form-control" name="sulfates" type="number" min="-1"
+                            placeholder="Example: 0.5" value="-1" step="0.01">
                     </th>
                     <th id="chlorides-toggle" style="width: 300px; text-align: center; display: none;">
                         <label for="chlorides" class="form-label">Chlorides</label>
-                        <input id="chlorides" class="form-control" name="chlorides" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="chlorides" class="form-control" name="chlorides" type="number" min="-1"
+                            placeholder="Example: 0.5" value="-1" step="0.01">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="alcohol" class="form-label">Alcohol</label>
                         <input id="alcohol" class="form-control" name="alcohol" type="number" min="-1" max="100"
-                            placeholder="0-100 (example: 67)" value="-1">
+                            placeholder="0-100 (example: 55.5)" value="-1" step="0.01">
                     </th>
                     <th style="width: 300px; text-align: center;"></th>
                 </table>
@@ -553,49 +553,49 @@
                     <th style="width: 300px; text-align: center;">
                         <label for="fixedAcidity" class="form-label">Fixed acidity</label>
                         <input id="fixedAcidity" class="form-control" name="fixedAcidity" type="number" min="-1"
-                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            placeholder="Example: 5.5" value="-1" step="0.01">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="volatileAcidity" class="form-label">Volatile acidity</label>
                         <input id="volatileAcidity" class="form-control" name="volatileAcidity" type="number" min="-1"
-                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            placeholder="Example: 5.5" value="-1" step="0.01">
                     </th>
                     <th id="citricAcid-toggle2" style="width: 300px; text-align: center;">
                         <label for="citricAcid" class="form-label">Citric acid</label>
-                        <input id="citricAcid" class="form-control" name="citricAcid" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="citricAcid" class="form-control" name="citricAcid" type="number" min="-1" max="1"
+                            placeholder="0-1.0 (example: 0.5)" value="-1" step="0.01">
                     </th>
                     <th id="residualSugar-toggle2" style="width: 300px; text-align: center; display: none;">
                         <label for="residualSugar" class="form-label">Residual sugar</label>
                         <input id="residualSugar" class="form-control" name="residualSugar" type="number" min="-1"
-                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            placeholder="Example: 5.5" value="-1" step="0.01">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
                         <input id="freeSulfurDioxide" class="form-control" name="freeSulfurDioxide" type="number"
-                            min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            min="-1" placeholder="Example: 55" value="-1" step="0.01">
                     </th>
                 </table>
                 <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
                         <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number"
-                            min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                            min="-1" placeholder="Example: 55" value="-1" step="0.01">
                     </th>
                     <th id="sulfates-toggle2" style="width: 300px; text-align: center;">
                         <label for="sulfates" class="form-label">Sulfates</label>
-                        <input id="sulfates" class="form-control" name="sulfates" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="sulfates" class="form-control" name="sulfates" type="number" min="-1"
+                            placeholder="Example: 0.5" value="-1" step="0.01">
                     </th>
                     <th id="chlorides-toggle2" style="width: 300px; text-align: center; display: none;">
                         <label for="chlorides" class="form-label">Chlorides</label>
-                        <input id="chlorides" class="form-control" name="chlorides" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="chlorides" class="form-control" name="chlorides" type="number" min="-1"
+                            placeholder="Example: 0.5" value="-1" step="0.01">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="alcohol" class="form-label">Alcohol</label>
                         <input id="alcohol" class="form-control" name="alcohol" type="number" min="-1" max="100"
-                            placeholder="0-100 (example: 67)" value="-1">
+                            placeholder="0-100 (example: 55.5)" value="-1" step=0.01>
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="quality" class="form-label">Quality</label>

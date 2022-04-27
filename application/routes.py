@@ -15,7 +15,7 @@ def enterQualityInfo():
     volatileAcidity = float(request.form.get("volatileAcidity"))
     freeSulfurDioxide = float(request.form.get("freeSulfurDioxide"))
     totalSulfurDioxide = float(request.form.get("totalSulfurDioxide"))
-    alcohol = int(request.form.get("alcohol"))
+    alcohol = float(request.form.get("alcohol"))
     wineType = request.form.get("wineType")
     quality = int(request.form.get("quality"))
 
@@ -63,7 +63,7 @@ def predictQuality():
     volatileAcidity = float(request.form.get("volatileAcidity"))
     freeSulfurDioxide = float(request.form.get("freeSulfurDioxide"))
     totalSulfurDioxide = float(request.form.get("totalSulfurDioxide"))
-    alcohol = int(request.form.get("alcohol"))
+    alcohol = float(request.form.get("alcohol"))
     wineType = request.form.get("wineType")
 
     # Convert data to JSON
