@@ -124,7 +124,7 @@
         <h1 style="color:rgb(242, 171, 147);text-align:center">Wine Club</h1>
         <hr>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </div>
 
     {% if (results) %}
@@ -132,7 +132,7 @@
     <p style="text-align: center; font-size: 40px;">Your wine has a quality of <mark
             style="color: rgb(209, 85, 102); background-color: white;">{{ results["qualityScore"] }} </mark><mark
             style="font-size: 30px; background-color: white;">(out of 10)</mark></p>
-    <p style="text-align: center; font-size: 23px;">This ranks it in the <mark
+    <p style="text-align: center; font-size: 26px;">This ranks it in the <mark
             style="color: rgb(233, 175, 128); background-color: white;"><strong>{{ (results["qualityRank"]*100) | int
                 }}{% if ((((results["qualityRank"]*100) |
                 int) | string) | last) == '1' %}st
@@ -146,37 +146,47 @@
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
                 <th style="width: 190px;"> Fixed acidity</th>
-                <td>{{ fixedAcidity }}</td>
+                <td>{{ info["fixedAcidity"] }}</td>
             </tr>
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
                 <th style="width: 190px;"> Volatile acidity</th>
-                <td> {{ volatileAcidity }}</td>
+                <td> {{ info["volatileAcidity"] }}</td>
             </tr>
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
+                {% if info["wineType"] == 'red' %}
                 <th style="width: 190px;"> Citric acid</th>
-                <td> {{ citricAcid }} </td>
+                <td> {{ info["citricAcid"] }} </td>
+                {% else %}
+                <th style="width: 190px;"> Residual Sugar</th>
+                <td> {{ info["residualSugar"] }} </td>
+                {% endif %}
             </tr>
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
                 <th style="width: 190px;"> Free sulfur dioxide</th>
-                <td> {{ freeSulfurDioxide }}</td>
+                <td> {{ info["freeSulfurDioxide"] }}</td>
             </tr>
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
                 <th style="width: 190px;"> Total sulfur dioxide</th>
-                <td> {{ totalSulfurDioxide }}</td>
+                <td> {{ info["totalSulfurDioxide"] }}</td>
             </tr>
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
+                {% if info["wineType"] == 'red' %}
                 <th style="width: 190px;"> Sulfates</th>
-                <td> {{ sulfates }}</td>
+                <td> {{ info["sulfates"] }}</td>
+                {% else %}
+                <th style="width: 190px;"> Chlorides</th>
+                <td> {{ info["chlorides"] }}</td>
+                {% endif %}
             </tr>
             <tr style="height: 50px;">
                 <td style="width: 3px;"></td>
                 <th style="width: 190px;"> Alcohol</th>
-                <td> {{ alcohol }}</td>
+                <td> {{ info["alcohol"] }}</td>
             </tr>
         </table>
     </div>
@@ -193,26 +203,39 @@
 
                 var fixed = '{{results["featureImportance"][0]*100}}';
                 var volatile = '{{results["featureImportance"][1]*100}}';
-                var citric = '{{results["featureImportance"][2]*100}}';
-                var dioxide = '{{results["featureImportance"][3]*100}}';
-                var totalDioxide = '{{results["featureImportance"][4]*100}}';
-                var sulfate = '{{results["featureImportance"][5]*100}}';
+                var citricOrSugar = '{{results["featureImportance"][2]*100}}';
+                var dioxideOrChloride = '{{results["featureImportance"][3]*100}}';
+                var totalDioxideOrDioxide = '{{results["featureImportance"][4]*100}}';
+                var sulfateOrTotalDioxide = '{{results["featureImportance"][5]*100}}';
                 var alc = '{{results["featureImportance"][6]*100}}';
 
                 // Draw the chart and set the chart values
                 function drawChart() {
-                    var data = google.visualization.arrayToDataTable([
+                    var dataRed = google.visualization.arrayToDataTable([
                         ['Feature Importance', 'Percentage'],
                         ['Fixed Acidity', parseFloat(fixed)],
                         ['Volatile Acidity', parseFloat(volatile)],
-                        ['Citric acid', parseFloat(citric)],
-                        ['Free sulfer dioxide', parseFloat(dioxide)],
-                        ['Total sulfer dioxode', parseFloat(totalDioxide)],
-                        ['Sulfates', parseFloat(sulfate)],
-                        ['Alcohol', parseFloat(alc)]]);
+                        ['Citric acid', parseFloat(citricOrSugar)],
+                        ['Free sulfer dioxide', parseFloat(dioxideOrChloride)],
+                        ['Total sulfer dioxode', parseFloat(totalDioxideOrDioxide)],
+                        ['Sulfates', parseFloat(sulfateOrTotalDioxide)],
+                        ['Alcohol', parseFloat(alc)]
+                    ]);
+
+                    var dataWhite = google.visualization.arrayToDataTable([
+                        ['Feature Importance', 'Percentage'],
+                        ['Fixed Acidity', parseFloat(fixed)],
+                        ['Volatile Acidity', parseFloat(volatile)],
+                        ['Residual Sugar', parseFloat(citricOrSugar)],
+                        ['Chlorides', parseFloat(dioxideOrChloride)],
+                        ['Free sulfer dioxode', parseFloat(totalDioxideOrDioxide)],
+                        ['Total sulfer dioxode', parseFloat(sulfateOrTotalDioxide)],
+                        ['Alcohol', parseFloat(alc)]
+                    ]);
                     // Optional; add a title and set the width and height of the chart
                     var options = {
-                        'title': 'Feature Importance', 'width': 600, 'height': 400, 'colors': ['#e45d74', '#e66c7b', '#e87a82', '#ea8788', '#ec948e', '#eea596', '#f4cba9'], 'is3D': true,
+                        'title': 'Feature Importance for Wine Quality', 'width': 600, 'height': 400,
+                        'colors': ['#470024', '#741b3b', '#b13f5a', '#e45d74', '#eb777d', '#f7a68e', '#ffc799'], 'is3D': true,
                         chartArea: { width: '100%' }, 'legend': {
                             'maxLines': 1,
                             'textStyle': {
@@ -223,7 +246,113 @@
 
                     // Display the chart inside the <div> element with id="piechart"
                     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-                    chart.draw(data, options);
+                    if ('{{info["wineType"]}}' == 'red') {
+                        chart.draw(dataRed, options);
+                    } else {
+                        chart.draw(dataWhite, options);
+                    }
+
+                }
+            </script>
+        </table>
+    </div>
+    <div class="column">
+        <table>
+            <div id="barChart" style="max-width:800px; height:400px;"></div>
+
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script>
+                google.charts.load('current', { 'packages': ['corechart'] });
+                google.charts.setOnLoadCallback(drawChart);
+
+                var zero = '{{results["allQualityScoresFreq"]["0.0"]}}';
+                var one = '{{results["allQualityScoresFreq"]["1.0"]}}';
+                var two = '{{results["allQualityScoresFreq"]["2.0"]}}';
+                var three = '{{results["allQualityScoresFreq"]["3.0"]}}';
+                var four = '{{results["allQualityScoresFreq"]["4.0"]}}';
+                var five = '{{results["allQualityScoresFreq"]["5.0"]}}';
+                var six = '{{results["allQualityScoresFreq"]["6.0"]}}';
+                var seven = '{{results["allQualityScoresFreq"]["7.0"]}}';
+                var eight = '{{results["allQualityScoresFreq"]["8.0"]}}';
+                var nine = '{{results["allQualityScoresFreq"]["9.0"]}}';
+                var ten = '{{results["allQualityScoresFreq"]["10.0"]}}';
+
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Quality', 'Frequency', { role: 'annotation' }],
+                        ['0.0', parseInt(zero), zero],
+                        ['1.0', parseInt(one), one],
+                        ['2.0', parseInt(two), two],
+                        ['3.0', parseInt(three), three],
+                        ['4.0', parseInt(four), four],
+                        ['5.0', parseInt(five), five],
+                        ['6.0', parseInt(six), six],
+                        ['7.0', parseInt(seven), seven],
+                        ['8.0', parseInt(eight), eight],
+                        ['9.0', parseInt(nine), nine],
+                        ['10.0', parseInt(ten), ten]
+                    ]);
+
+                    var optionsRed = {
+                        title: 'Quality Score Distributions (Red Wine)',
+                        colors: ['#62398b'],
+                        legend: { position: 'none' }
+                    };
+
+                    var optionsWhite = {
+                        title: 'Quality Score Distributions (White Wine)',
+                        colors: ['#62398b'],
+                        legend: { position: 'none' }
+                    };
+
+                    var chart = new google.visualization.BarChart(document.getElementById('barChart'));
+                    if ('{{info["wineType"]}}' == 'red') {
+                        chart.draw(data, optionsRed);
+                    } else {
+                        chart.draw(data, optionsWhite);
+                    }
+                }
+            </script>
+        </table>
+    </div>
+    <div class="column">
+        <table>
+            <div id="stackBarChart" style="max-width:3000px; height:200px;"></div>
+            <script>
+
+                google.charts.load('current', { 'packages': ['corechart'] });
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Quality', '0.0', '1.0', '2.0', '3.0', '4.0',
+                            '5.0', '6.0', '7.0', '8.0', '9.0', '10.0'],
+                        ['Frequency', parseInt(zero), parseInt(one), parseInt(two), parseInt(three),
+                            parseInt(four), parseInt(five), parseInt(six), parseInt(seven), parseInt(eight), parseInt(nine), parseInt(ten)]
+                    ]);
+
+                    var optionsRed = {
+                        title: 'Percentage distribution of quality (Red Wine)',
+                        legend: { position: 'none' },
+                        isStacked: 'percent',
+                        colors: ['#81bfe4', '#80b8df', '#7fb4dd', '#7eafd9', '#7ba4d2', '#7898ca', '#758cc2', '#6e6cad', '#6b60a5', '#68549d', '#654493'],
+                        orientation: 'vertical',
+                    };
+
+                    var optionsWhite = {
+                        title: 'Percentage distribution of quality (White Wine)',
+                        legend: { position: 'none' },
+                        isStacked: 'percent',
+                        colors: ['#81bfe4', '#80b8df', '#7fb4dd', '#7eafd9', '#7ba4d2', '#7898ca', '#758cc2', '#6e6cad', '#6b60a5', '#68549d', '#654493']
+                    };
+
+                    var chart = new google.visualization.BarChart(document.getElementById('stackBarChart'));
+                    if ('{{info["wineType"]}}' == 'red') {
+                        chart.draw(data, optionsRed);
+                    } else {
+                        chart.draw(data, optionsWhite);
+                    }
+
                 }
             </script>
         </table>
@@ -278,8 +407,8 @@
                     </th>
                     <th id="residualSugar-toggle" style="width: 300px; text-align: center; display: none;">
                         <label for="residualSugar" class="form-label">Residual sugar</label>
-                        <input id="residualSugar" class="form-control" name="residualSugar" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="residualSugar" class="form-control" name="residualSugar" type="number" min="-1"
+                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
@@ -312,13 +441,16 @@
                 </table>
                 <br>
                 <div class="all-divs">
-                    <label class="radioButton" onclick="toggleFields('sulfates-toggle', 'chlorides-toggle'); toggleFields('citricAcid-toggle', 'residualSugar-toggle');">Red
-                        <input id="red" class="form-check-input" name="wineType" type="radio" value="red" checked="checked">
+                    <label class="radioButton"
+                        onclick="toggleFields('sulfates-toggle', 'chlorides-toggle'); toggleFields('citricAcid-toggle', 'residualSugar-toggle');">Red
+                        <input id="red" class="form-check-input" name="wineType" type="radio" value="red"
+                            checked="checked">
                         </inputid>
                         <span class="checkmark"></span>
                     </label>
 
-                    <label class="radioButton" onclick="toggleFields('chlorides-toggle', 'sulfates-toggle'); toggleFields('residualSugar-toggle', 'citricAcid-toggle');">White
+                    <label class="radioButton"
+                        onclick="toggleFields('chlorides-toggle', 'sulfates-toggle'); toggleFields('residualSugar-toggle', 'citricAcid-toggle');">White
                         <input id="white" class="form-check-input" name="wineType" type="radio" value="white">
                         </inputid>
                         <span class="checkmark"></span>
@@ -337,13 +469,13 @@
                 <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="fixedAcidity" class="form-label">Fixed acidity</label>
-                        <input id="fixedAcidity" class="form-control" name="fixedAcidity" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="fixedAcidity" class="form-control" name="fixedAcidity" type="number" min="-1"
+                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="volatileAcidity" class="form-label">Volatile acidity</label>
-                        <input id="volatileAcidity" class="form-control" name="volatileAcidity" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="volatileAcidity" class="form-control" name="volatileAcidity" type="number" min="-1"
+                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th id="citricAcid-toggle2" style="width: 300px; text-align: center;">
                         <label for="citricAcid" class="form-label">Citric acid</label>
@@ -352,20 +484,20 @@
                     </th>
                     <th id="residualSugar-toggle2" style="width: 300px; text-align: center; display: none;">
                         <label for="residualSugar" class="form-label">Residual sugar</label>
-                        <input id="residualSugar" class="form-control" name="residualSugar" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="residualSugar" class="form-control" name="residualSugar" type="number" min="-1"
+                            max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th style="width: 300px; text-align: center;">
                         <label for="freeSulfurDioxide" class="form-label">Free sulfur dioxide</label>
-                        <input id="freeSulfurDioxide" class="form-control" name="freeSulfurDioxide" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="freeSulfurDioxide" class="form-control" name="freeSulfurDioxide" type="number"
+                            min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                 </table>
                 <table class="inputTable">
                     <th style="width: 300px; text-align: center;">
                         <label for="totalSulfurDioxide" class="form-label">Total sulfur dioxide</label>
-                        <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number" min="-1" max="10.0"
-                            placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
+                        <input id="totalSulfurDioxide" class="form-control" name="totalSulfurDioxide" type="number"
+                            min="-1" max="10.0" placeholder="0.0-10.0 (example: 5.5)" value="-1" step="0.1">
                     </th>
                     <th id="sulfates-toggle2" style="width: 300px; text-align: center;">
                         <label for="sulfates" class="form-label">Sulfates</label>
@@ -390,13 +522,16 @@
                 </table>
                 <br>
                 <div class="all-divs">
-                    <label class="radioButton" onclick="toggleFields('sulfates-toggle2', 'chlorides-toggle2'); toggleFields('citricAcid-toggle2', 'residualSugar-toggle2');">Red
-                        <input id="red" class="form-check-input" name="wineType" type="radio" value="red" checked="checked">
+                    <label class="radioButton"
+                        onclick="toggleFields('sulfates-toggle2', 'chlorides-toggle2'); toggleFields('citricAcid-toggle2', 'residualSugar-toggle2');">Red
+                        <input id="red" class="form-check-input" name="wineType" type="radio" value="red"
+                            checked="checked">
                         </inputid>
                         <span class="checkmark"></span>
                     </label>
 
-                    <label class="radioButton" onclick="toggleFields('chlorides-toggle2', 'sulfates-toggle2'); toggleFields('residualSugar-toggle2', 'citricAcid-toggle2');">White
+                    <label class="radioButton"
+                        onclick="toggleFields('chlorides-toggle2', 'sulfates-toggle2'); toggleFields('residualSugar-toggle2', 'citricAcid-toggle2');">White
                         <input id="white" class="form-check-input" name="wineType" type="radio" value="white">
                         </inputid>
                         <span class="checkmark"></span>
@@ -408,6 +543,8 @@
                 </div>
             </form>
         </div>
+        <br>
+        <br>
     </div>
     </div>
 
