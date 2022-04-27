@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <style>
-
     .all-divs {
         text-align: justify;
         display: flex;
@@ -129,11 +128,21 @@
 
     {% if (results) %}
     {% if (is_predict_quality) %}
-    <p style="text-align: center; font-size: 38px;">Your wine has a quality of <mark
-            style="color: rgb(233, 175, 128); background-color: white;">{{ results["qualityScore"] }} </mark>
-        <mark style="font-size: 30px; background-color: white;">(out of 10)</mark>
+    <script>
+        var string = '{{ results["qualityScore"] }}'
+        var count = Object.keys(test).length;
+        if (count == 5) {
+            string = string.replace(/[\])}[{(]/g, '');
+        }
+    </script>
+
+    <p style="text-align: center; font-size: 34px;">Your wine has a quality of <mark
+            style="color: rgb(233, 175, 128); background-color: white;"><b>
+                {{ results["qualityScore"] }}
+            </b> </mark>
+        <mark style="font-size: 28px; background-color: white;">(out of 10)</mark>
     </p>
-    <p style="text-align: center; font-size: 26px;">This ranks it in the <mark
+    <p style="text-align: center; font-size: 28px;">This ranks it in the <mark
             style="color: rgb(233, 175, 128); background-color: white;">
             <strong>{{ (results["qualityRank"]*100) | int
                 }}{% if ((((results["qualityRank"]*100) |
@@ -146,6 +155,11 @@
 
     <div class="all-divs">
         <table>
+            {% if info["wineType"] == 'red' %}
+            <p style="font-size: 12px;"><b>Percentage distribution of quality (Red Wine)</b></p>
+            {% else %}
+            <p style="font-size: 12px;"><b>Percentage distribution of quality (White Wine)</b></p>
+            {% endif %}
             <div id="stackBarChart"></div>
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -173,8 +187,8 @@
                             parseInt(four), parseInt(five), parseInt(six), parseInt(seven), parseInt(eight), parseInt(nine), parseInt(ten)]
                     ]);
 
-                    var optionsRed = {
-                        title: 'Percentage distribution of quality (Red Wine)',
+                    var options = {
+                        titlePosition: 'none',
                         legend: { position: 'none' },
                         isStacked: 'percent',
                         colors: ['#ffc799', '#fab492', '#f6a48d', '#eb777d', '#e86a79', '#cc4f68', '#b13f5a', '#942e4b', '#741b3b', '#6c1637', '#470024'],
@@ -182,32 +196,13 @@
                             minValue: 0,
                             ticks: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]
                         },
-                        height: 150,
-                        width: 700,
-                    };
-
-                    var optionsWhite = {
-                        title: 'Percentage distribution of quality (White Wine)',
-                        legend: { position: 'none' },
-                        isStacked: 'percent',
-                        colors: ['#ffc799', '#fab492', '#f6a48d', '#eb777d', '#e86a79', '#cc4f68', '#b13f5a', '#942e4b', '#741b3b', '#6c1637', '#470024'],
-                        hAxis: {
-                            minValue: 0,
-                            ticks: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]
-                        },
-                        height: 150,
-                        width: 700,
+                        height: 110,
+                        width: 900,
                     };
 
                     var chart = new google.visualization.BarChart(document.getElementById('stackBarChart'));
-                    if ('{{info["wineType"]}}' == 'red') {
-                        chart.draw(data, optionsRed);
-                        drawVAxisLine(chart, parseFloat('{{results["qualityRank"]}}'));
-                    } else {
-                        chart.draw(data, optionsWhite);
-                        drawVAxisLine(chart, parseFloat('{{results["qualityRank"]}}'));
-                    }
-
+                    chart.draw(data, options);
+                    drawVAxisLine(chart, parseFloat('{{results["qualityRank"]}}'));
                 }
 
                 function drawVAxisLine(chart, value) {
@@ -263,7 +258,7 @@
 
                 function drawChart() {
                     var data = google.visualization.arrayToDataTable([
-                        ['Quality', 'Frequency', { role: 'annotation' }, {role: 'style'}],
+                        ['Quality', 'Frequency', { role: 'annotation' }, { role: 'style' }],
                         ['0.0', parseInt(zero), zero + ' ( ' + (parseFloat((parseInt(array[0]) / sum)) * 100).toFixed(2) + '% )', '#ffc799'],
                         ['1.0', parseInt(one), one + ' ( ' + (parseFloat((parseInt(array[1]) / sum)) * 100).toFixed(2) + '% )', '#fab492'],
                         ['2.0', parseInt(two), two + ' ( ' + (parseFloat((parseInt(array[2]) / sum)) * 100).toFixed(2) + '% )', '#f6a48d'],
@@ -286,7 +281,7 @@
 
                     var optionsWhite = {
                         title: 'Quality Score Distributions (White Wine)',
-                        
+
                         legend: { position: 'none' },
                         width: 600,
                         height: 400
@@ -346,8 +341,21 @@
                         ['Alcohol', parseFloat(alc)]
                     ]);
                     // Optional; add a title and set the width and height of the chart
-                    var options = {
-                        'title': 'Feature Importance for Wine Quality', 'width': 600, 'height': 400,
+                    var optionsRed = {
+                        'title': 'Feature Importance for Wine Quality (Red Wine)', 'width': 600, 'height': 400,
+                        'colors': ['#BE5F7C', '#D4826A', '#D4B06A', '#C3CF68', '#468C77', '#4A6B8A', '#6A4E90'], 'is3D': true,
+                        chartArea: { width: '100%' }, 'legend': {
+                            'maxLines': 1,
+                            'textStyle': {
+                                'fontSize': 15
+                            }
+                        },
+                        width: 600,
+                        height: 400
+                    };
+
+                    var optionsWhite = {
+                        'title': 'Feature Importance for Wine Quality (White Wine)', 'width': 600, 'height': 400,
                         'colors': ['#BE5F7C', '#D4826A', '#D4B06A', '#C3CF68', '#468C77', '#4A6B8A', '#6A4E90'], 'is3D': true,
                         chartArea: { width: '100%' }, 'legend': {
                             'maxLines': 1,
@@ -362,9 +370,9 @@
                     // Display the chart inside the <div> element with id="piechart"
                     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
                     if ('{{info["wineType"]}}' == 'red') {
-                        chart.draw(dataRed, options);
+                        chart.draw(dataRed, optionsRed);
                     } else {
-                        chart.draw(dataWhite, options);
+                        chart.draw(dataWhite, optionsWhite);
                     }
 
                 }
@@ -372,7 +380,7 @@
         </table>
     </div>
 
-    <div class="column">
+    <div class="column" style="width: 100%;">
         <table class="resultTable" style="text-align: center; width: 1400px;">
             <tr style="height: 30px;">
                 <th style="width: 190px; color: #BE5F7C"> Fixed acidity</th>
@@ -412,7 +420,7 @@
         <br>
         <br>
     </div>
-    
+
     {% else %}
     <h3 style="text-align: center;">{{ results }}</h3>
     {% endif %}
